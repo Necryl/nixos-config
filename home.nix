@@ -11,6 +11,7 @@
     ripgrep
     warp-terminal
     gh
+    gcc
   ];
 
   # Example: Enable a program (e.g., Git)
