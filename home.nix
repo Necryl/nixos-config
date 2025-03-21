@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nvim-config, ... }:
 {
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     firefox
     neovim
+    ripgrep
     warp-terminal
     gh
   ];
@@ -34,5 +35,6 @@
 home.sessionVariables = {
 TERMINAL = "warp-terminal";
 };
+home.file.".config/nvim".source = nvim-config; # Nix pulls this from GitHub
 
 }
