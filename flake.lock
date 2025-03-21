@@ -56,7 +56,24 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nvim-config": "nvim-config"
+        "nvim-config": "nvim-config",
+        "warp-terminal-theme": "warp-terminal-theme"
+      }
+    },
+    "warp-terminal-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1741797085,
+        "narHash": "sha256-X0oFbRNSJKu0zgLYQookUz238HxNmz59pHb4MTF5IBA=",
+        "owner": "Necryl",
+        "repo": "warp-terminal-theme",
+        "rev": "710171f61bb739b1b1965616f3d0dbf322d4c87f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Necryl",
+        "repo": "warp-terminal-theme",
+        "type": "github"
       }
     }
   },

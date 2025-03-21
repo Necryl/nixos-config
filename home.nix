@@ -12,6 +12,8 @@
     warp-terminal
     gh
     gcc
+    xclip  # For X11 clipboard support
+    wl-clipboard
   ];
 
   # Example: Enable a program (e.g., Git)

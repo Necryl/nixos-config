@@ -11,6 +11,10 @@
       url = "github:Necryl/nvim-config"; 
       flake = false; # repo isn’t a flake
     };
+    warp-terminal-theme = {
+      url = "github:Necryl/warp-terminal-theme";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nvim-config, ... }:
@@ -25,8 +29,8 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.necryl = import ./home.nix; # Replace "yourusername" with your actual username
-	  home-manager.extraSpecialArgs = { inherit nvim-config; };
+          home-manager.users.necryl = import ./home.nix;
+	        home-manager.extraSpecialArgs = { inherit nvim-config;};
         }
       ];
     };
