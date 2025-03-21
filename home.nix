@@ -31,4 +31,8 @@
       IdentityFile ~/.ssh/id_ed25519
   '';
 };
+home.sessionVariables = {
+TERMINAL = "warp-terminal";
+};
+
 }
