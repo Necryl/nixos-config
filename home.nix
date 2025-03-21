@@ -1,4 +1,4 @@
-{ config, pkgs, nvim-config, ... }:
+{ config, pkgs, nvim-config, warp-terminal-theme, ... }:
 {
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
@@ -39,5 +39,6 @@ home.sessionVariables = {
 TERMINAL = "warp-terminal";
 };
 home.file.".config/nvim".source = nvim-config; # Nix pulls this from GitHub
+home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
 
 }

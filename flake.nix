@@ -17,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nvim-config, ... }:
+  outputs = { self, nixpkgs, home-manager, nvim-config, warp-terminal-theme, ... }:
   let
     system = "x86_64-linux"; # Adjust if you're on a different architecture (e.g., "aarch64-linux")
   in {
@@ -30,7 +30,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.necryl = import ./home.nix;
-	        home-manager.extraSpecialArgs = { inherit nvim-config;};
+	        home-manager.extraSpecialArgs = { inherit nvim-config warp-terminal-theme;};
         }
       ];
     };
