@@ -15,6 +15,7 @@
       tokyo-night-transparent = {
         inherits = "tokyonight";
         "ui.background" = { bg = "none"; }; # Transparent background
+        "ui.text" = { bg = "none"; }; # Text background
       };
     };
   };
