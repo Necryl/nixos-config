@@ -25,7 +25,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.necryl = import ./home.nix;
+          home-manager.users.necryl = import home-manager/home.nix;
 	        home-manager.extraSpecialArgs = { inherit warp-terminal-theme;};
         }
       ];

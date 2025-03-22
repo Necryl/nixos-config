@@ -1,5 +1,8 @@
 { config, pkgs, warp-terminal-theme, ... }:
 {
+  imports = [
+    ./modules/helix.nix
+  ];
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
   home.stateVersion = "23.11"; # Adjust based on your NixOS version (e.g., "24.05" if newer)
@@ -13,8 +16,6 @@
     fzf
     imagemagick  # Provides 'magick'/'convert'
     nodejs
-    tree-sitter
-    helix
   ];
 
   # Example: Enable a program (e.g., Git)
