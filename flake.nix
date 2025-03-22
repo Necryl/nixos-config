@@ -11,9 +11,10 @@
       url = "github:Necryl/warp-terminal-theme";
       flake = false;
     };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
-  outputs = { self, nixpkgs, home-manager, warp-terminal-theme, ... }:
+  outputs = { self, nixpkgs, home-manager, warp-terminal-theme, ... }@inputs:
   let
     system = "x86_64-linux"; # Adjust if you're on a different architecture (e.g., "aarch64-linux")
   in {
@@ -26,7 +27,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.necryl = import home-manager/home.nix;
-	        home-manager.extraSpecialArgs = { inherit warp-terminal-theme;};
+	        home-manager.extraSpecialArgs = { inherit inputs warp-terminal-theme;};
         }
       ];
     };

@@ -1,4 +1,4 @@
-{ config, pkgs, warp-terminal-theme, ... }:
+{ config, pkgs, inputs, warp-terminal-theme, ... }:
 {
   imports = [
     ./modules/helix.nix
@@ -16,6 +16,7 @@
     fzf
     imagemagick  # Provides 'magick'/'convert'
     nodejs
+    inputs.zen-browser.packages."${system}".default
   ];
 
   # Example: Enable a program (e.g., Git)
