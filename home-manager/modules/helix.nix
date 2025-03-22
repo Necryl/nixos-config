@@ -7,12 +7,7 @@
 
     # Theme configuration
     settings = {
-      theme = "tokyo-night"; # Built-in Tokyo Night theme
-      editor = {
-        color-modes = true; # Enable true color support
-        cursorline = true; # Highlight the current line
-        bufferline = "multiple"; # Show all open buffers
-      };
+      theme = "tokyo-night-transparent"; # Built-in Tokyo Night theme
     };
 
     # Optional: Override theme for transparency
@@ -22,12 +17,6 @@
         "ui.background" = { bg = "none"; }; # Transparent background
       };
     };
-  };
-
-  # Force runtime link directly from package
-  home.file.".config/helix/runtime" = {
-    source = "${pkgs.helix}/share/helix/runtime";
-    recursive = true; # Ensure all subdirs (like themes) are linked
   };
 
   # Helix dependencies (e.g., LSPs if needed)
