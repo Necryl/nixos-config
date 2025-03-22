@@ -1,4 +1,4 @@
-{ config, pkgs, nvim-config, warp-terminal-theme, ... }:
+{ config, pkgs, warp-terminal-theme, ... }:
 {
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
@@ -7,13 +7,14 @@
   # Example: Install some packages
   home.packages = with pkgs; [
     firefox
-    neovim
-    ripgrep
     warp-terminal
     gh
-    gcc
-    xclip  # For X11 clipboard support
-    wl-clipboard
+    fd
+    fzf
+    imagemagick  # Provides 'magick'/'convert'
+    nodejs
+    tree-sitter
+    helix
   ];
 
   # Example: Enable a program (e.g., Git)
@@ -38,7 +39,6 @@
 home.sessionVariables = {
 TERMINAL = "warp-terminal";
 };
-home.file.".config/nvim".source = nvim-config; # Nix pulls this from GitHub
 home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
 
 }

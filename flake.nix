@@ -7,17 +7,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nvim-config = {
-      url = "github:Necryl/nvim-config"; 
-      flake = false; # repo isn’t a flake
-    };
     warp-terminal-theme = {
       url = "github:Necryl/warp-terminal-theme";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nvim-config, warp-terminal-theme, ... }:
+  outputs = { self, nixpkgs, home-manager, warp-terminal-theme, ... }:
   let
     system = "x86_64-linux"; # Adjust if you're on a different architecture (e.g., "aarch64-linux")
   in {
@@ -30,7 +26,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.necryl = import ./home.nix;
-	        home-manager.extraSpecialArgs = { inherit nvim-config warp-terminal-theme;};
+	        home-manager.extraSpecialArgs = { inherit warp-terminal-theme;};
         }
       ];
     };

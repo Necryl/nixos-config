@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742569620,
-        "narHash": "sha256-igC2cu+cPRB3E4QwKR+vGagyAtoyB+DrmWwDKm8jkaw=",
+        "lastModified": 1742588233,
+        "narHash": "sha256-Fi5g8H5FXMSRqy+mU6gPG0v+C9pzjYbkkiePtz8+PpA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "8a68f18e96bcab13e4f97bece61e6602298a3141",
+        "rev": "296ddc64627f4a6a4eb447852d7346b9dd16197d",
         "type": "github"
       },
       "original": {
@@ -36,27 +36,10 @@
         "type": "github"
       }
     },
-    "nvim-config": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1742207261,
-        "narHash": "sha256-V3Fl/9b/RRVkzvTFsE5FFIZOnGCXX+ZsWBT7k5gXgZY=",
-        "owner": "Necryl",
-        "repo": "nvim-config",
-        "rev": "36b60fd0c92b077fde74ea86e7046b7441edfe9e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Necryl",
-        "repo": "nvim-config",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nvim-config": "nvim-config",
         "warp-terminal-theme": "warp-terminal-theme"
       }
     },
