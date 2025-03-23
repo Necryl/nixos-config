@@ -13,8 +13,18 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev"; # For UEFI, set to "nodev" instead of a disk
+    efiSupport = true;
+    useOSProber = true; # Optional: Detect other operating systems
+  };
+
+  boot.loader.efi = {
+    canTouchEfiVariables = true; # Allow NixOS to modify EFI variables
+    efiSysMountPoint = "/boot"; # Ensure this matches your EFI partition mount point
+  };
 
   nix.gc = {
     automatic = true;
