@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.helix = {
@@ -14,10 +19,23 @@
     themes = {
       tokyo-night-transparent = {
         inherits = "tokyonight";
-        "ui.background" = { bg = "none"; }; # Transparent background
-        "ui.text" = { bg = "none"; }; # Text background
+        "ui.background" = {
+          bg = "none";
+        }; # Transparent background
+        "ui.text" = {
+          bg = "none";
+        }; # Text background
       };
     };
+
+    languages.language = [
+      {
+        name = "nix";
+        auto-format = true;
+        formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+      }
+    ];
+
   };
 
   # Helix dependencies (e.g., LSPs if needed)

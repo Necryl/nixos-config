@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, warp-terminal-theme, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  warp-terminal-theme,
+  ...
+}:
 {
   imports = [
     ./modules/helix.nix
@@ -14,11 +20,15 @@
     gh
     fd
     fzf
-    imagemagick  # Provides 'magick'/'convert'
+    imagemagick # Provides 'magick'/'convert'
     nodejs
     inputs.zen-browser.packages."${system}".default
     persepolis
-    pnpm
+    nodePackages.npm
+    nodePackages.svelte-language-server # Svelte LSP
+    nodePackages.typescript-language-server # JS and TS LSP
+    nodePackages.vscode-langservers-extracted # JSON LSP
+    nodePackages.pnpm
   ];
 
   # Example: Enable a program (e.g., Git)
@@ -32,17 +42,17 @@
     };
   };
   programs.ssh = {
-  enable = true;
-  extraConfig = ''
-    Host github.com
-      HostName github.com
-      User git
-      IdentityFile ~/.ssh/id_ed25519
-  '';
-};
-home.sessionVariables = {
-TERMINAL = "warp-terminal";
-};
-home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
+    enable = true;
+    extraConfig = ''
+      Host github.com
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_ed25519
+    '';
+  };
+  home.sessionVariables = {
+    TERMINAL = "warp-terminal";
+  };
+  home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
 
 }
