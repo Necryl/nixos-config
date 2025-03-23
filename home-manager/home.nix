@@ -18,6 +18,7 @@
     nodejs
     inputs.zen-browser.packages."${system}".default
     persepolis
+    pnpm
   ];
 
   # Example: Enable a program (e.g., Git)
