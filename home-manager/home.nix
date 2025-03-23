@@ -17,6 +17,7 @@
     imagemagick  # Provides 'magick'/'convert'
     nodejs
     inputs.zen-browser.packages."${system}".default
+    persepolis
   ];
 
   # Example: Enable a program (e.g., Git)

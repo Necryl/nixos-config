@@ -34,6 +34,7 @@
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
+  time.hardwareClockInLocalTime = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_IN";
@@ -111,6 +112,10 @@
   #  wget
   ];
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+  ];
+  
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
