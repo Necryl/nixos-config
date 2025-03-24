@@ -28,14 +28,82 @@
       };
     };
 
-    languages.language = [
-      {
-        name = "nix";
-        auto-format = true;
-        formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
-      }
-    ];
-
+    languages = {
+      language = [
+        {
+          name = "nix";
+          auto-format = true;
+          formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+        }
+        {
+          name = "svelte";
+          auto-format = true;
+          language-servers = [ "svelteserver" ];
+        }
+        {
+          name = "javascript";
+          auto-format = true;
+          formatter = {
+            args = [
+              "--parser"
+              "javascript"
+            ];
+            command = lib.getExe pkgs.nodePackages.prettier;
+          };
+          language-servers = [ "typescript-language-server" ];
+        }
+        {
+          name = "typescript";
+          auto-format = true;
+          formatter = {
+            args = [
+              "--parser"
+              "typescript"
+            ];
+            command = lib.getExe pkgs.nodePackages.prettier;
+          };
+          language-servers = [ "typescript-language-server" ];
+        }
+        {
+          name = "json";
+          auto-format = true;
+          language-servers = [ "vscode-json-language-server" ];
+        }
+        {
+          name = "html";
+          auto-format = true;
+          formatter = {
+            command = lib.getExe pkgs.nodePackages.prettier;
+            args = [
+              "--parser"
+              "html"
+            ];
+          };
+          language-servers = [
+            "vscode-html-language-server"
+            "emmet-lsp"
+          ]; # Use both for maximum coverage
+        }
+      ];
+      language-server = {
+        svelteserver = {
+          command = lib.getExe pkgs.nodePackages.svelte-language-server;
+          args = [ "--stdio" ];
+        };
+        typescript-language-server = {
+          command = lib.getExe pkgs.nodePackages.typescript-language-server;
+          args = [ "--stdio" ];
+        };
+        vscode-json-language-server = {
+          command = "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-json-language-server";
+          args = [ "--stdio" ];
+        };
+        emmet-lsp = {
+          command = lib.getExe pkgs.emmet-language-server;
+          args = [ "--stdio" ];
+        };
+      };
+    };
   };
 
   # Helix dependencies (e.g., LSPs if needed)

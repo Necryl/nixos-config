@@ -28,7 +28,9 @@
     nodePackages.svelte-language-server # Svelte LSP
     nodePackages.typescript-language-server # JS and TS LSP
     nodePackages.vscode-langservers-extracted # JSON LSP
+    emmet-language-server
     nodePackages.pnpm
+    nodePackages.prettier
   ];
 
   # Example: Enable a program (e.g., Git)
