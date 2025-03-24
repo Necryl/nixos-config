@@ -4,13 +4,24 @@
 
 { config, pkgs, ... }:
 
+let
+  cybergrub-theme = pkgs.fetchFromGitHub {
+    owner = "adnksharp";
+    repo = "CyberGRUB-2077";
+    rev = "76b13c8e591958a104f6186efae3000da1032a35"; # Use a specific commit hash for reproducibility (check the latest commit on GitHub)
+    sha256 = "sha256-Y5Jr+huIXnsSbN/HFhXQewFprX+FySTPdUa1KT0nMfM="; # Replace with actual hash
+  };
+in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = false;
@@ -20,6 +31,8 @@
     efiSupport = true;
     useOSProber = true; # Optional: Detect other operating systems
   };
+  # Set the theme
+  boot.loader.grub.theme = "${cybergrub-theme}/CyberGRUB-2077";
 
   boot.loader.efi = {
     canTouchEfiVariables = true; # Allow NixOS to modify EFI variables
@@ -100,9 +113,12 @@
   users.users.necryl = {
     isNormalUser = true;
     description = "Necryl";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -121,13 +137,13 @@
     neofetch
     steam-run
     git
-  #  wget
+    #  wget
   ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
   ];
-  
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
