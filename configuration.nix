@@ -30,9 +30,32 @@ in
     device = "nodev"; # For UEFI, set to "nodev" instead of a disk
     efiSupport = true;
     useOSProber = true; # Optional: Detect other operating systems
+
+    # Flexible resolution detection for both UEFI and BIOS
+    gfxmodeEfi = "auto"; # Used if system boots in UEFI mode
+    gfxmodeBios = "auto"; # Used if system boots in BIOS mode
+
+    # Set the theme
+    theme = "${cybergrub-theme}/CyberGRUB-2077";
+
+    extraConfig = ''
+      # Load modules based on platform (UEFI or BIOS)
+      if [ "$grub_platform" = "efi" ]; then
+        insmod efi_gop
+      else
+        insmod vbe
+      fi
+      insmod all_video
+      insmod gfxterm
+
+      # Try 1920x1080, fall back to auto if it fails
+      set gfxmode=1920x1080,auto
+      set gfxpayload=keep
+
+      terminal_output console
+      terminal_output gfxterm
+    '';
   };
-  # Set the theme
-  boot.loader.grub.theme = "${cybergrub-theme}/CyberGRUB-2077";
 
   boot.loader.efi = {
     canTouchEfiVariables = true; # Allow NixOS to modify EFI variables
