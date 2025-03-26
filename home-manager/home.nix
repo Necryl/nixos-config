@@ -31,6 +31,7 @@
     emmet-language-server
     nodePackages.pnpm
     nodePackages.prettier
+    obsidian
   ];
 
   # Example: Enable a program (e.g., Git)
