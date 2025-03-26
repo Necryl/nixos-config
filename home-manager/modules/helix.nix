@@ -13,8 +13,24 @@
     # Theme configuration
     settings = {
       theme = "tokyo-night-transparent"; # Built-in Tokyo Night theme
-    };
+      editor = {
+        soft-wrap.enable = true;
+        end-of-line-diagnostics = "hint";
+        inline-diagnostics.cursor-line = "warning";
+      };
+      keys.normal = {
+        C-s = ":w";
+      };
 
+      keys.insert = {
+        C-s = ":w";
+      };
+
+      keys.select = {
+        C-s = ":w";
+      };
+    };
+    # test
     # Optional: Override theme for transparency
     themes = {
       tokyo-night-transparent = {
