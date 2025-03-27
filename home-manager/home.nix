@@ -64,8 +64,6 @@
     '';
   };
   home.sessionVariables = {
-    LANG = "en_US.UTF-8"; # Ensure UTF-8 for general language
-    LC_ALL = "en_US.UTF-8"; # Override all locale settings
     TERMINAL = "warp-terminal";
   };
   home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
