@@ -62,6 +62,32 @@ in
     efiSysMountPoint = "/boot"; # Ensure this matches your EFI partition mount point
   };
 
+  boot = {
+    plymouth = {
+      enable = true;
+      theme = "spinner_alt"; # Set the theme to spinner_alt
+      themePackages = with pkgs; [
+        (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
+      ]; # Provide the theme package
+    };
+    initrd = {
+      verbose = false;
+      systemd.enable = true; # Keep early Plymouth support
+      availableKernelModules = [ "i915" ]; # Adjust for your GPU
+    };
+    consoleLogLevel = 0;
+    kernelParams = [
+      "quiet"
+      "splash"
+      "loglevel=3"
+      "rd.udev.log_level=3"
+      "rd.systemd.show_status=auto"
+    ];
+    loader = {
+      timeout = 5; # Keep GRUB visible for 5 seconds
+    };
+  };
+
   nix.gc = {
     automatic = true;
     dates = "daily";
@@ -160,6 +186,8 @@ in
     neofetch
     steam-run
     git
+    (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
+    pciutils
     #  wget
   ];
 
