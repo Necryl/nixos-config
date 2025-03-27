@@ -16,7 +16,18 @@
       editor = {
         soft-wrap.enable = true;
         end-of-line-diagnostics = "hint";
+
         inline-diagnostics.cursor-line = "warning";
+        color-modes = true;
+        auto-format = true;
+        cursorline = true;
+        cursorcolumn = true;
+        indent-guides.render = true;
+        cursor-shape = {
+          normal = "block";
+          insert = "bar";
+          select = "underline";
+        };
       };
       keys.normal = {
         "C-s" = ":w";
