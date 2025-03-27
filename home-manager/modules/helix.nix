@@ -19,7 +19,33 @@
         inline-diagnostics.cursor-line = "warning";
       };
       keys.normal = {
-        C-s = ":w";
+        "C-s" = ":w";
+
+        # Alt+Up or Alt+j to move line up
+        "A-up" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "move_line_up"
+          "paste_before"
+        ];
+        "A-j" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "move_line_up"
+          "paste_before"
+        ];
+
+        # Alt+Down or Alt+k to move line down
+        "A-down" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "paste_after"
+        ];
+        "A-k" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "paste_after"
+        ];
       };
 
       keys.insert = {
@@ -28,6 +54,32 @@
 
       keys.select = {
         C-s = ":w";
+
+        # Alt+Up or Alt+j to move selected lines up
+        "A-up" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "move_line_up"
+          "paste_before"
+        ];
+        "A-j" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "move_line_up"
+          "paste_before"
+        ];
+
+        # Alt+Down or Alt+k to move selected lines down
+        "A-down" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "paste_after"
+        ];
+        "A-k" = [
+          "extend_to_line_bounds"
+          "delete_selection"
+          "paste_after"
+        ];
       };
     };
     # test
