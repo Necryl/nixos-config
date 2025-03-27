@@ -109,7 +109,10 @@ in
   time.hardwareClockInLocalTime = true;
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_IN";
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8" # Optional: Add US English as a fallback
+  ];
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_IN";
@@ -194,6 +197,8 @@ in
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
   ];
+
+  home-manager.backupFileExtension = "backup";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
