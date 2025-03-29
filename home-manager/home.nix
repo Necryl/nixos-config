@@ -33,6 +33,7 @@
     nodePackages.prettier
     obsidian
     mission-center
+    copyq
   ];
 
   # Manage btop configuration
