@@ -34,6 +34,7 @@
     obsidian
     mission-center
     copyq
+    discord
   ];
 
   # Manage btop configuration
