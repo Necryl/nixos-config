@@ -35,6 +35,8 @@
     mission-center
     copyq
     discord
+    yazi
+    ueberzugpp # image rednering support for yazi
   ];
 
   # Manage btop configuration

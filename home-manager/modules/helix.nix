@@ -32,6 +32,11 @@
       keys.normal = {
         "C-s" = ":w";
 
+        " " = {
+          q = ":q";
+          Q = ":qa";
+        };
+
         # Alt+Up or Alt+j to move line up
         "A-up" = [
           "extend_to_line_bounds"
