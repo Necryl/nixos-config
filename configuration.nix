@@ -191,6 +191,8 @@ in
     git
     (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
     pciutils
+    kdePackages.dolphin
+    kdePackages.konsole
     #  wget
   ];
 
