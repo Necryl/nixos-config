@@ -8,7 +8,7 @@ Temrinal: warp-terminal ✓
 Browser: Zen ✓
 IDE: Helix ✓
 Notifications: Swaync
-File manager: Dolphin & Yazi
+File manager: Dolphin & Yazi ✓
 Lock Screen: Swaylock-Effects
 System Monitor: BTop & Mission Center ✓
 Music Player: I will make a custom webapp, which I have always wanted to
