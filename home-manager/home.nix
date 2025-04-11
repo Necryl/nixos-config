@@ -47,27 +47,6 @@
     };
   };
 
-  # Yazi config
-  programs.yazi = {
-    enable = true;
-    settings = {
-    };
-  };
-
-  home.file.".config/yazi/theme.toml".text = ''
-    [flavor]
-    use = "tokyo-night"
-    dark = "tokyo-night"
-  '';
-
-  # Clone the entire tokyo-night.yazi repo into flavors/
-  home.file.".config/yazi/flavors/tokyo-night.yazi".source = pkgs.fetchFromGitHub {
-    owner = "BennyOe";
-    repo = "tokyo-night.yazi";
-    rev = "main"; # Use 'main' branch
-    sha256 = "sha256-+wZzxLPCttJ2WoDdI89sQ+CcZSFIA44HshxMoh4rJIs="; # Update if needed
-  };
-
   # Example: Enable a program (e.g., Git)
   programs.git = {
     enable = true;
