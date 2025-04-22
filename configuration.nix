@@ -2,7 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 let
   cybergrub-theme = pkgs.fetchFromGitHub {
@@ -135,8 +141,23 @@ in
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm = {
+    enable = true;
+    wayland = true;
+  };
   services.xserver.desktopManager.gnome.enable = true;
+
+  # Enable Hyprland
+  programs.hyprland = {
+    enable = true;
+    package = pkgs.hyprland;
+    xwayland.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -202,6 +223,12 @@ in
     kdePackages.konsole
     wineWowPackages.stable
     #  wget
+    waybar
+    rofi-wayland
+    swww
+    dunst
+    libnotify
+    gpaste
   ];
 
   # Enable envfs
@@ -213,9 +240,14 @@ in
 
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
+    font-awesome
   ];
 
   home-manager.backupFileExtension = "backup";
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
