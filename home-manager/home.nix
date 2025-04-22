@@ -33,9 +33,9 @@
     nodePackages.prettier
     obsidian
     mission-center
-    copyq
     discord
     ueberzugpp # image rednering support for yazi
+    brave
   ];
 
   # Manage btop configuration
