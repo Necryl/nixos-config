@@ -85,7 +85,7 @@
         "$mod, M, exit"
         "$mod, E, exec, dolphin"
         "$mod, W, exec, zen"
-        "$mod, R, exec, rofi -show drun"
+        "$mod, SPACE, exec, rofi -show drun"
         "$mod, Q, togglefloating"
       ];
       bindm = [
