@@ -39,7 +39,26 @@
     brave
     nautilus
     gnome-tweaks
+    interception-tools
+    interception-tools-plugins.dual-function-keys
   ];
+
+  home.file.".config/interception/udevmon.yaml".text = ''
+    - JOB: "intercept -g $DEVNODE | dual-function-keys -c ~/.config/interception/dual-function-keys.yaml | uinput -d $DEVNODE"
+      DEVICE:
+        EVENTS:
+          EV_KEY: [KEY_LEFTMETA]
+  '';
+
+  home.file.".config/interception/dual-function-keys.yaml".text = ''
+    TIMING:
+      TAP_MILLISEC: 200
+
+    MAPPINGS:
+      - KEY: KEY_LEFTMETA
+        TAP: [ EXEC, rofi -show drun ]
+        HOLD: KEY_LEFTMETA
+  '';
 
   # Manage btop configuration
   programs.btop = {
@@ -87,6 +106,7 @@
         "$mod, W, exec, zen"
         "$mod, SPACE, exec, rofi -show drun"
         "$mod, Q, togglefloating"
+        "$mod, F, fullscreen"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"
@@ -144,4 +164,5 @@
       };
     };
   };
+
 }
