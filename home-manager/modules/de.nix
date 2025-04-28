@@ -1,5 +1,6 @@
-{ config, pkgs,...}:
-{wayland.windowManager.hyprland = {
+{ config, pkgs, ... }:
+{
+  wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     package = pkgs.hyprland;
@@ -72,4 +73,4 @@
       };
     };
   };
-};
+}
