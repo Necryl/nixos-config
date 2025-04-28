@@ -1,0 +1,17 @@
+(defcfg
+  input  (device-file "/dev/input/by-id/your-keyboard-id")
+  output (uinput-sink "KMonad Output")
+
+  ;; Tap-hold configuration for the Super key (usually Left Meta)
+  (defsrc
+    esc :kp ESC
+    lmet :&lmet
+    ;; ... define all your other keys here ...
+    )
+
+  (deflayer base
+    esc :kp ESC
+    lmet :&th LMeta (exec "rofi -show drun")
+    ;; ... define your keybindings here, using the source keys ...
+    )
+)
