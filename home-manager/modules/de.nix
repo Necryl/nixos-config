@@ -16,6 +16,21 @@
         "$mod, Q, togglefloating"
         "$mod, F, fullscreen"
         "$mod, M, fullscreen, 1"
+        # Workspace switching
+        "$mod, 1, workspace, 1"
+        "$mod, 2, workspace, 2"
+        "$mod, 3, workspace, 3"
+        "$mod, 4, workspace, 4"
+        "$mod, 5, workspace, 5"
+        # Move windows to workspaces
+        "$mod SHIFT, 1, movetoworkspace, 1"
+        "$mod SHIFT, 2, movetoworkspace, 2"
+        "$mod SHIFT, 3, movetoworkspace, 3"
+        "$mod SHIFT, 4, movetoworkspace, 4"
+        "$mod SHIFT, 5, movetoworkspace, 5"
+        # Scroll through workspaces
+        "$mod, mouse_down, workspace, e+1"
+        "$mod, mouse_up, workspace, e-1"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"
