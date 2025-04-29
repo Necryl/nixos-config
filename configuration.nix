@@ -141,7 +141,6 @@ in
   services.xserver.enable = true;
 
   services.xserver.videoDrivers = [
-    "nvidia"
     "amdgpu"
     "intel"
   ];
