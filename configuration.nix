@@ -236,6 +236,8 @@ in
     gpaste
     tree
     kmonad
+    gnumeric
+    libreoffice
   ];
 
   # Enable envfs
