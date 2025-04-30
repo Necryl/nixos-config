@@ -152,6 +152,7 @@ in
   };
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.dbus.enable = true;
   # Enable Hyprland
   programs.hyprland = {
     enable = true;
