@@ -67,12 +67,17 @@
         "col.inactive_border" = "rgba(595959aa)";
       };
       exec-once = [
-        "swww init && swww img /home/necryl/wallpaper.jpg"
+        "hyprpaper"
         "waybar"
         "dunst"
       ];
     };
   };
+
+  xdg.configFile."hypr/hyprpaper.conf".text = ''
+    preload = /home/necryl/Pictures/wallpaper.jpg
+    wallpaper = ,/home/necryl/Pictures/wallpaper.jpg
+  '';
 
   programs.waybar = {
     enable = true;

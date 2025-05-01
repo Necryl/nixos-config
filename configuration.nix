@@ -231,7 +231,6 @@ in
     #  wget
     waybar
     rofi-wayland
-    swww
     dunst
     libnotify
     gpaste
@@ -239,6 +238,8 @@ in
     kmonad
     gnumeric
     libreoffice
+    hyprpaper
+    appimage-run
   ];
 
   # Define MIME type for .exe files
