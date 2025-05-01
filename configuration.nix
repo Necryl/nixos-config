@@ -241,6 +241,49 @@ in
     libreoffice
   ];
 
+  # Define MIME type for .exe files
+  environment.etc."xdg/mime/packages/wine-exe.xml" = {
+    text = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+        <mime-type type="application/x-ms-dos-executable">
+          <comment>Windows Executable</comment>
+          <glob pattern="*.exe"/>
+        </mime-type>
+      </mime-info>
+    '';
+    mode = "0644";
+  };
+
+  # Create .desktop file for Wine
+  environment.etc."xdg/applications/wine.desktop" = {
+    text = ''
+      [Desktop Entry]
+      Name=Wine
+      Exec=${pkgs.wine}/bin/wine %f
+      Type=Application
+      MimeType=application/x-ms-dos-executable;
+      Icon=wine
+      NoDisplay=true
+    '';
+    mode = "0644";
+  };
+
+  # Set Wine as the default application for .exe files
+  environment.etc."xdg/mimeapps.list" = {
+    text = ''
+      [Default Applications]
+      application/x-ms-dos-executable=wine.desktop
+    '';
+    mode = "0644";
+  };
+
+  # Ensure MIME and desktop databases are updated
+  system.activationScripts.updateMimeAndDesktopDatabases = ''
+    ${pkgs.shared-mime-info}/bin/update-mime-database /etc/xdg/mime
+    ${pkgs.desktop-file-utils}/bin/update-desktop-database /etc/xdg/applications
+  '';
+
   # Enable envfs
   services.envfs.enable = true;
 
