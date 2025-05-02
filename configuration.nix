@@ -202,6 +202,8 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "video"
+      "fuse"
     ];
     packages = with pkgs; [
       #  thunderbird
@@ -245,6 +247,7 @@ in
     qt6Packages.qt6ct
     libsForQt5.qt5ct
     adwaita-qt
+    rclone
   ];
 
   # Define MIME type for .exe files
