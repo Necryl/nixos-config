@@ -245,6 +245,8 @@ in
     libsForQt5.qt5ct
     adwaita-qt
     rclone
+    vlc
+    nomacs
   ];
 
   # Set GNOME settings via dconf
