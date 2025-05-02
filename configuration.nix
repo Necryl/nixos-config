@@ -227,6 +227,7 @@ in
     pciutils
     kdePackages.dolphin
     kdePackages.konsole
+    kdePackages.ark
     wineWowPackages.stable
     #  wget
     waybar
