@@ -240,6 +240,10 @@ in
     libreoffice
     hyprpaper
     appimage-run
+    qt5.qttools
+    qt6Packages.qt6ct
+    libsForQt5.qt5ct
+    adwaita-qt
   ];
 
   # Define MIME type for .exe files
@@ -290,7 +294,10 @@ in
 
   programs.nix-ld.enable = true;
 
-  environment.variables.EDITOR = "hx";
+  environment.variables = {
+    EDITOR = "hx";
+    QT_STYLE_OVERRIDE = "gtk2";
+  };
 
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
