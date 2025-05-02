@@ -210,9 +210,6 @@ in
     ];
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -249,6 +246,9 @@ in
     adwaita-qt
     rclone
   ];
+
+  # Set GNOME settings via dconf
+  programs.dconf.enable = true;
 
   # Define MIME type for .exe files
   environment.etc."xdg/mime/packages/wine-exe.xml" = {

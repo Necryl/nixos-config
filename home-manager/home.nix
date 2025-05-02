@@ -70,6 +70,12 @@
         IdentityFile ~/.ssh/id_ed25519
     '';
   };
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      new = "touch";
+    };
+  };
   home.sessionVariables = {
     TERMINAL = "warp-terminal";
   };
