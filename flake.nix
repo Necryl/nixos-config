@@ -12,7 +12,7 @@
       flake = false;
     };
     future-cursors = {
-      url = "github:yeyushengfan258/Future-cursors";
+      url = "github:Necryl/Future-cursors";
       flake = false; # This is a non-flake repository
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";

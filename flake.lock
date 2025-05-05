@@ -3,15 +3,15 @@
     "future-cursors": {
       "flake": false,
       "locked": {
-        "lastModified": 1626421793,
-        "narHash": "sha256-ziEgMasNVhfzqeURjYJK1l5BeIHk8GK6C4ONHQR7FyY=",
-        "owner": "yeyushengfan258",
+        "lastModified": 1746428133,
+        "narHash": "sha256-oebEijzC6tVK8pEIa+hyPxWOs7RuUHnvetf10XRM0tk=",
+        "owner": "Necryl",
         "repo": "Future-cursors",
-        "rev": "587c14d2f5bd2dc34095a4efbb1a729eb72a1d36",
+        "rev": "b983ffa3625111da34f89cdbba016c4fb9c117b7",
         "type": "github"
       },
       "original": {
-        "owner": "yeyushengfan258",
+        "owner": "Necryl",
         "repo": "Future-cursors",
         "type": "github"
       }
