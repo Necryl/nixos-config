@@ -79,7 +79,10 @@ in
     initrd = {
       verbose = false;
       systemd.enable = true; # Keep early Plymouth support
-      availableKernelModules = [ "i915" ]; # Adjust for your GPU
+      availableKernelModules = [
+        "i915"
+        "amdgpu"
+      ]; # Adjust for your GPU
     };
     consoleLogLevel = 0;
     kernelParams = [
@@ -138,12 +141,14 @@ in
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services.xserver.enable = false;
 
-  services.xserver.videoDrivers = [
-    "amdgpu"
-    "intel"
-  ];
+  # services.xserver.videoDrivers = [
+  # "amdgpu"
+  # "intel"
+  # ];
+
+  hardware.enableRedistributableFirmware = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm = {
@@ -166,10 +171,10 @@ in
   };
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  # services.xserver.xkb = {
+  # layout = "us";
+  # variant = "";
+  # };
 
   hardware.graphics.enable = true;
 
