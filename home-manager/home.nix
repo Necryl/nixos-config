@@ -5,6 +5,11 @@
   warp-terminal-theme,
   ...
 }:
+let
+  # Define the path to your onedrive.sh script
+  onedriveScript = "${config.home.homeDirectory}/nixos-config/Utility Scripts/onedrive.sh";
+in
+
 {
   imports = [
     ./modules/helix.nix
@@ -40,6 +45,13 @@
     brave
     nautilus
     gnome-tweaks
+    libnotify
+    (pkgs.writeTextFile {
+      name = "onedrive.sh";
+      executable = true;
+      destination = "/bin/onedrive.sh"; # Place in a system-wide bin for accessibility
+      text = builtins.readFile onedriveScript; # Read the script content
+    })
   ];
 
   # Manage btop configuration
@@ -80,5 +92,17 @@
     TERMINAL = "warp-terminal";
   };
   home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
+
+  # Create the .desktop file for GNOME
+  xdg.desktopEntries.onedrive = {
+    name = "OneDrive Toggle";
+    comment = "Toggle OneDrive on or off";
+    exec = "${pkgs.bash}/bin/bash /bin/onedrive.sh";
+    terminal = false;
+    type = "Application";
+    icon = "onedrive";
+    categories = [ "Utility" ];
+
+  };
 
 }

@@ -26,16 +26,13 @@ xsetroot -cursor_name watch 2>/dev/null
 REL_PATH="${FILE_PATH#$MOUNT_PATH/}"
 
 # Generate rclone link
+echo "Link: $REMOTE_NAME:$REL_PATH";
 LINK=$(rclone link "$REMOTE_NAME:$REL_PATH")
-
+echo "Recieved: $LINK";
 # Restore normal cursor
 xsetroot -cursor_name left_ptr 2>/dev/null
 
-# Handle failure
-if [[ $? -ne 0 || -z "$LINK" ]]; then
-    notify-send "rclone link" "Failed to get link"
-    exit 1
-fi
+
 
 # Open link
 flatpak run com.microsoft.Edge "$LINK" &

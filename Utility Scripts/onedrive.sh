@@ -10,7 +10,7 @@ FUSERMOUNT_BIN="/run/wrappers/bin/fusermount3"
 
 # Ensure mount point exists
 mkdir -p "$MOUNT_POINT" || {
-    echo "$(date): ERROR: Failed to create mount point $MOUNT_POINT" >> "$LOG_FILE"
+    notify-send "$(date): ERROR: Failed to create mount point $MOUNT_POINT" >> "$LOG_FILE"
     exit 1
 }
 
@@ -25,7 +25,7 @@ is_mounted() {
 
 # Function to mount OneDrive
 mount_onedrive() {
-    echo "$(date): Mounting OneDrive at $MOUNT_POINT" >> "$LOG_FILE"
+    notify-send "Mounting OneDrive at $MOUNT_POINT" >> "$LOG_FILE"
     $RCLONE_BIN mount "$REMOTE" "$MOUNT_POINT" \
         --vfs-cache-mode full \
         --vfs-read-chunk-size 32M \
@@ -40,18 +40,18 @@ mount_onedrive() {
         --log-file "$LOG_FILE" &
     sleep 2 # Wait for mount to initialize
     if is_mounted; then
-        echo "$(date): Successfully mounted OneDrive" >> "$LOG_FILE"
-        echo "OneDrive mounted at $MOUNT_POINT"
+        notify-send "Successfully mounted OneDrive" >> "$LOG_FILE"
+        notify-send "OneDrive mounted at $MOUNT_POINT"
     else
-        echo "$(date): ERROR: Failed to mount OneDrive" >> "$LOG_FILE"
-        echo "Failed to mount OneDrive. Check $LOG_FILE for details."
+        notify-send "ERROR: Failed to mount OneDrive" >> "$LOG_FILE"
+        notify-send "Failed to mount OneDrive. Check $LOG_FILE for details."
         exit 1
     fi
 }
 
 # Function to unmount OneDrive
 unmount_onedrive() {
-    echo "$(date): Unmounting OneDrive from $MOUNT_POINT" >> "$LOG_FILE"
+    notify-send "Unmounting OneDrive from $MOUNT_POINT" >> "$LOG_FILE"
     # Stop any rclone mount process
     RCLONE_PID=$(pgrep -f "rclone mount $REMOTE $MOUNT_POINT")
     if [ -n "$RCLONE_PID" ]; then
@@ -65,11 +65,11 @@ unmount_onedrive() {
         $FUSERMOUNT_BIN -u "$MOUNT_POINT" 2>/dev/null
     }
     if ! is_mounted; then
-        echo "$(date): Successfully unmounted OneDrive" >> "$LOG_FILE"
-        echo "OneDrive unmounted from $MOUNT_POINT"
+        notify-send "Successfully unmounted OneDrive" >> "$LOG_FILE"
+        notify-send "OneDrive unmounted from $MOUNT_POINT"
     else
-        echo "$(date): ERROR: Failed to unmount OneDrive" >> "$LOG_FILE"
-        echo "Failed to unmount OneDrive. Check $LOG_FILE for details."
+        notify-send "ERROR: Failed to unmount OneDrive" >> "$LOG_FILE"
+        notify-send "Failed to unmount OneDrive. Check $LOG_FILE for details."
         exit 1
     fi
 }
