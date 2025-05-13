@@ -21,8 +21,11 @@ in
 {
   imports = [
     # Include the results of the hardware scan.
-    /etc/nixos/hardware-configuration.nix
+    ./hardware-configuration.nix
   ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = [ "fuse" ];
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -80,8 +83,26 @@ in
       verbose = false;
       systemd.enable = true; # Keep early Plymouth support
       availableKernelModules = [
+        # Storage
+        "ahci"
+        "nvme"
+        "sd_mod"
+        "sr_mod"
+        # USB
+        "usbhid"
+        "usb_storage"
+        "uas"
+        "xhci_pci"
+        # Filesystems
+        "vfat"
+        "ext4"
+        "btrfs"
+        # SD card readers
+        "rtsx_pci_sdmmc"
+        # GPUs (existing + expanded)
         "i915"
         "amdgpu"
+        "radeon"
       ]; # Adjust for your GPU
     };
     consoleLogLevel = 0;
@@ -163,6 +184,7 @@ in
     enable = true;
     package = pkgs.hyprland;
     xwayland.enable = true;
+    withUWSM = true;
   };
 
   xdg.portal = {
@@ -179,7 +201,28 @@ in
   hardware.graphics.enable = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    browsing = true; # Enables browsing for network printers
+    defaultShared = true; # Share local printers on the network
+    listenAddresses = [ "*:631" ]; # Listen on all interfaces for network printing
+    allowFrom = [ "all" ]; # Allow access from all network devices (restrict as needed)
+    openFirewall = true; # Open firewall ports for CUPS (port 631)
+  };
+
+  # Enable Avahi for automatic printer discovery (mDNS/ZeroConf)
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # Enable mDNS resolution for IPv4
+    openFirewall = true; # Open firewall for Avahi (port 5353)
+    publish = {
+      enable = true;
+      userServices = true; # Advertise user services like printers
+    };
+  };
+
+  # Avoid stateful SSH keys
+  services.openssh.hostKeys = [ ];
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -199,6 +242,7 @@ in
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.necryl = {
@@ -229,9 +273,21 @@ in
     git
     (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
     pciutils
+    kitty
+    usbutils
+    lshw
     kdePackages.dolphin
     kdePackages.konsole
     kdePackages.ark
+    kdePackages.kio
+    kdePackages.kio-extras
+    kdePackages.kdegraphics-thumbnailers
+    kdePackages.breeze-icons
+    kdePackages.qtwayland
+    kdePackages.kde-cli-tools
+    kdePackages.xdg-desktop-portal-kde
+    xdg-desktop-portal
+    xdg-desktop-portal-hyprland
     wineWowPackages.stable
     #  wget
     waybar
@@ -252,6 +308,9 @@ in
     rclone
     vlc
     nomacs
+    # Additional tools for debugging
+    dmidecode
+    util-linux
   ];
 
   # Set GNOME settings via dconf
@@ -300,11 +359,6 @@ in
     ${pkgs.desktop-file-utils}/bin/update-desktop-database /etc/xdg/applications
   '';
 
-  # Enable envfs
-  services.envfs.enable = true;
-
-  programs.nix-ld.enable = true;
-
   environment.variables = {
     EDITOR = "hx";
     QT_STYLE_OVERRIDE = "gtk2";
@@ -320,7 +374,11 @@ in
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
   };
-
+  # Debug tools for hardware
+  environment.etc."modprobe.d/debug.conf" = {
+    text = "options drm.debug=0x1e log_buf_len=1M";
+    mode = "0644";
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

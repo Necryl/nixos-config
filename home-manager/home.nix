@@ -1,14 +1,11 @@
 {
+  self,
   config,
   pkgs,
   inputs,
   warp-terminal-theme,
   ...
 }:
-let
-  # Define the path to your onedrive.sh script
-  onedriveScript = "${config.home.homeDirectory}/nixos-config/Utility Scripts/onedrive.sh";
-in
 
 {
   imports = [
@@ -46,13 +43,9 @@ in
     nautilus
     gnome-tweaks
     libnotify
-    (pkgs.writeTextFile {
-      name = "onedrive.sh";
-      executable = true;
-      destination = "/bin/onedrive.sh"; # Place in a system-wide bin for accessibility
-      text = builtins.readFile onedriveScript; # Read the script content
-    })
   ];
+
+  programs.kitty.enable = true; # required for the default Hyprland config
 
   # Manage btop configuration
   programs.btop = {
@@ -90,6 +83,13 @@ in
   };
   home.sessionVariables = {
     TERMINAL = "warp-terminal";
+    NIXOS_OZONE_WL = "1";
+    PATH = "$HOME/.local/bin:$PATH";
+  };
+
+  home.file.".local/bin/onedrive.sh" = {
+    source = "${self}/Utility Scripts/onedrive.sh"; # Copy onedrive.sh from Utility Scripts/
+    executable = true; # Make the script executable
   };
   home.file.".local/share/warp-terminal/themes/".source = warp-terminal-theme;
 
@@ -97,12 +97,11 @@ in
   xdg.desktopEntries.onedrive = {
     name = "OneDrive Toggle";
     comment = "Toggle OneDrive on or off";
-    exec = "${pkgs.bash}/bin/bash /bin/onedrive.sh";
+    exec = "${pkgs.bash}/bin/bash /home/necryl/.local/bin/onedrive.sh"; # Update to user-writable path
     terminal = false;
     type = "Application";
     icon = "onedrive";
     categories = [ "Utility" ];
-
   };
 
 }

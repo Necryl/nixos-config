@@ -72,7 +72,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.necryl = import home-manager/home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs warp-terminal-theme; };
+            home-manager.extraSpecialArgs = { inherit inputs warp-terminal-theme self; };
           }
         ];
       };
