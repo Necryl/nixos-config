@@ -1,0 +1,16 @@
+OS: NixOS ✓
+Display Manager: lightdm-webkit2-greeter
+Window Manager/Compositor: Hyprland ✓
+Status bar: Waybar ✓
+App Launcher: AnyRun
+Wallpaper manager: Hyprpaper
+Temrinal: warp-terminal ✓
+Browser: Zen ✓
+IDE: Helix ✓
+Notifications: Swaync
+File manager: Dolphin & Yazi ✓
+Lock Screen: Swaylock-Effects
+System Monitor: BTop & Mission Center ✓
+Music Player: I will make a custom webapp, which I have always wanted to
+Clipboard: CopyQ (no, needs to be reviewed, copyq had build issues on nix)
+Display Manager: wdisplays

@@ -1,0 +1,58 @@
+{
+  self,
+  config,
+  pkgs,
+  inputs,
+  warp-terminal-theme,
+  ...
+}:
+{
+  imports = [
+    ./modules/helix.nix
+    ./modules/btop.nix
+    ./modules/de.nix
+    ./modules/warp-terminal.nix
+    ./modules/git.nix
+    ./modules/yazi.nix
+  ];
+  home.username = "necryl"; # Replace with your username
+  home.homeDirectory = "/home/necryl";
+  home.stateVersion = "24.11"; # Adjust based on your NixOS version (e.g., "24.05" if newer)
+
+  # Example: Install some packages
+  home.packages = with pkgs; [
+    imagemagick # Provides 'magick'/'convert'
+    obsidian
+    ueberzugpp # image rednering support for yazi
+    brave
+    nodejs
+    nodePackages.npm
+    nodePackages.svelte-language-server # Svelte LSP
+    nodePackages.typescript-language-server # JS and TS LSP
+    nodePackages.vscode-langservers-extracted # JSON LSP
+    emmet-language-server
+    nodePackages.pnpm
+    nodePackages.prettier
+    inkscape
+    microsoft-edge
+    webcord
+    vesktop
+    discord-canary
+  ];
+
+  # programs.kitty.enable = true; # required for the default Hyprland config
+
+  # Example: Enable a program (e.g., Git)
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      new = "touch";
+    };
+  };
+  home.sessionVariables = {
+    TERMINAL = "warp-terminal";
+    # NIXOS_OZONE_WL = "1";
+    # PATH = "$HOME/.local/bin:$PATH";
+  };
+
+}
