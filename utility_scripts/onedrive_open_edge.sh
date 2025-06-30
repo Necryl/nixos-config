@@ -35,7 +35,7 @@ xsetroot -cursor_name left_ptr 2>/dev/null
 
 
 # Open link
-flatpak run com.microsoft.Edge "$LINK" &
+microsoft-edge "$LINK" &
 
 # Notify user
 notify-send "OneDrive link opened" "$LINK"

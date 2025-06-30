@@ -35,8 +35,6 @@
     nodePackages.prettier
     inkscape
     microsoft-edge
-    webcord
-    vesktop
     discord-canary
   ];
 
