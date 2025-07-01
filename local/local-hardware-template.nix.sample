@@ -1,0 +1,23 @@
+# this file is just an example for what the local file could be
+# do not use this file, as it is just my configuration for my machine
+
+{
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixssd-root";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/nixssd-boot";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
+
+  swapDevices = [
+    { device = "/dev/disk/by-partlabel/nixssd-swap"; }
+  ];
+
+}
