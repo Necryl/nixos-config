@@ -36,17 +36,17 @@
       # Allow unfree packages in nixpkgs
       pkgs = import nixpkgs {
         inherit system;
+        config.allowUnfree = true; # Mirrors configuration.nix
         overlays = [
           (final: prev: {
             warp-terminal = prev.warp-terminal.overrideAttrs (old: {
               src = prev.fetchurl {
                 url = old.src.url; # Keep the same URL
-                sha256 = "yrwS6rqSGkiWNjr17MVyH+ZQL2CTUqt6coi8qWfq0Gg="; # New hash
+                sha256 = "yrwS6rqSGkiWNjr17MVyH+ZQL2CTUqt6coi8qWfq0Gg=";
               };
             });
           })
         ];
-        config.allowUnfree = true; # Mirrors configuration.nix
       };
     in
     {
@@ -59,7 +59,7 @@
       # NixOS system configuration
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs pkgs; };
         modules = [
           # Import existing configurations
           ./default/hardware-configuration.nix
@@ -78,7 +78,14 @@
               ];
             };
             home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit inputs warp-terminal-theme self; };
+            home-manager.extraSpecialArgs = {
+              inherit
+                inputs
+                warp-terminal-theme
+                self
+                pkgs
+                ;
+            };
           }
 
           # Flake-specific settings
