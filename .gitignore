@@ -1,2 +1,3 @@
 local/*
 !local/local-hardware.nix
+!local/local-hardware-template.nix
