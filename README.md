@@ -12,16 +12,7 @@ This README explains how to manage the `local/local-hardware.nix` file in this r
 
 Follow these steps to set up `local/local-hardware.nix`:
 
-1. **Un-ignore `local/local-hardware.nix` in `.gitignore`**:
-   Since `local/` is ignored, we need to explicitly allow `local/local-hardware.nix`. Add the following to `.gitignore`:
-   ```gitignore
-   local/*
-   !local/local-hardware.nix
-   ```
-   - `local/*` ignores all files in the `local/` folder.
-   - `!local/local-hardware.nix` un-ignores `local/local-hardware.nix`, making it trackable by Git.
-
-2. **Add the file to Git’s index without staging content**:
+1. **Add the file to Git’s index without staging content**:
    Run the following command to mark `local/local-hardware.nix` as tracked in Git’s index without storing its contents:
    ```bash
    git add local/local-hardware.nix --intent-to-add
@@ -29,7 +20,7 @@ Follow these steps to set up `local/local-hardware.nix`:
    - This makes the file visible to Nix flakes (e.g., for `nix flake check`) without committing it.
    - Check with `git status`—the file should appear under "Changes to be committed" with `(new file, intent to add)`.
 
-3. **Prevent accidental staging of changes**:
+2. **Prevent accidental staging of changes**:
    To ensure changes to `local/local-hardware.nix` aren’t accidentally staged (e.g., by `git add .`), run:
    ```bash
    git update-index --assume-unchanged local/local-hardware.nix
