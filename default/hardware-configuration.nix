@@ -11,7 +11,6 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    "../local/local-hardware.nix"
   ];
 
   hardware.enableAllHardware = true;
