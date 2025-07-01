@@ -1,6 +1,13 @@
-# Managing `local/local-hardware.nix` in Nix Flakes
+# My nixos setup
 
-This README explains how to manage the `local/local-hardware.nix` file in this repository to make it visible to Nix flakes without committing or pushing it to the remote repository. This is useful for local, machine-specific configurations that should remain private.
+It is a simple  setup with Cosmic DE, Helix as the code editor, Warp as the terminal. And a bunch of other random softwares I needed. I will try to build the system up to be as polished as it can be. The packages in the home.nix is more just personal softwares, not really necessary for the system. Although some of the customising of some softwares like helic and yazi is done through home-manager.
+
+I aim for a cyberpunk aesthetic as that's what I love. It is not completely there yet, but we will see.
+There is a cosmic theme file in the main directory, that has to be imported in COsmic Appearance settings to get the color scheme.
+
+> # Managing `local/local-hardware.nix` in Nix Flakes
+
+This section explains how to manage the `local/local-hardware.nix` file in this repository to make it visible to Nix flakes without committing or pushing it to the remote repository. This is useful for local, machine-specific configurations that should remain private.
 
 ## Background
 
@@ -10,7 +17,7 @@ This README explains how to manage the `local/local-hardware.nix` file in this r
 
 ## Setup Instructions
 
-Follow these steps to set up `local/local-hardware.nix`:
+Follow these steps to set up `local/local-hardware.nix` (it is assumed you are at the main directory of the repo):
 
 1. **Add the file to Git’s index without staging content**:
    Run the following command to mark `local/local-hardware.nix` as tracked in Git’s index without storing its contents:
