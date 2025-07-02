@@ -1,11 +1,11 @@
 {
   fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos-root";
+    device = "/dev/disk/by-label/nixssd-root";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/nixos-boot";
+    device = "/dev/disk/by-label/nixssd-boot";
     fsType = "vfat";
     options = [
       "fmask=0077"
@@ -14,6 +14,7 @@
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-partlabel/nixos-swap"; }
+    { device = "/dev/disk/by-partlabel/nixssd-swap"; }
   ];
+
 }
