@@ -23,7 +23,7 @@
     owner = "BennyOe";
     repo = "tokyo-night.yazi";
     rev = "main"; # Use 'main' branch
-    sha256 = "sha256-WtOjzk7ATA4Ue6Lu6IgiweOIHk/BK01Khio6ESF201k="; # Update if needed
+    sha256 = "sha256-4aNPlO5aXP8c7vks6bTlLCuyUQZ4Hx3GWtGlRmbhdto="; # Update if needed
   };
 
   # Helix dependencies (e.g., LSPs if needed)
