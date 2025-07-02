@@ -177,7 +177,13 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  programs.nix-ld.enable = true;
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      ## Put here any library that is required when running a package
+      (pkgs.runCommand "steamrun-lib" { } "mkdir $out; ln -s ${pkgs.steam-run.fhsenv}/usr/lib64 $out/lib")
+    ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
