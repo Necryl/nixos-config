@@ -38,6 +38,7 @@
         inherit system;
         config.allowUnfree = true; # Mirrors configuration.nix
       };
+      localHardwarePath = "${self.outPath}/local/local-hardware.nix";
     in
     {
       # Define packages as a single attribute set
@@ -57,7 +58,7 @@
           ./packages.nix
           ./modules.nix
           ./cache.nix
-          ~/nixos-config/local/local-hardware.nix
+          localHardwarePath
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
