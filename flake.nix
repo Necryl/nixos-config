@@ -37,16 +37,6 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true; # Mirrors configuration.nix
-        overlays = [
-          (final: prev: {
-            warp-terminal = prev.warp-terminal.overrideAttrs (old: {
-              src = prev.fetchurl {
-                url = old.src.url; # Keep the same URL
-                sha256 = "yrwS6rqSGkiWNjr17MVyH+ZQL2CTUqt6coi8qWfq0Gg=";
-              };
-            });
-          })
-        ];
       };
     in
     {
@@ -59,7 +49,7 @@
       # NixOS system configuration
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs pkgs; };
+        specialArgs = { inherit inputs; };
         modules = [
           # Import existing configurations
           ./default/hardware-configuration.nix
@@ -84,7 +74,6 @@
                 inputs
                 warp-terminal-theme
                 self
-                pkgs
                 ;
             };
           }
