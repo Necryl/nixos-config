@@ -57,7 +57,7 @@
           ./packages.nix
           ./modules.nix
           ./cache.nix
-          ./local/local-hardware.nix
+          ~/nixos-config/local/local-hardware.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
