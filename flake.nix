@@ -38,15 +38,15 @@
         inherit system;
         config.allowUnfree = true; # Mirrors configuration.nix
       };
-      localHardwarePath = "${self.outPath}/local/local-hardware.nix";
     in
     {
+
       # Define packages as a single attribute set
       packages.${system} = {
         hello = pkgs.hello;
         default = pkgs.hello;
-      };
 
+      };
       # NixOS system configuration
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
@@ -58,7 +58,7 @@
           ./packages.nix
           ./modules.nix
           ./cache.nix
-          localHardwarePath
+          /home/necryl/nixos-config/local/local-hardware.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
