@@ -1,9 +1,9 @@
 # My nixos setup
 
-It is a simple  setup with Cosmic DE, Helix as the code editor, Warp as the terminal. And a bunch of other random softwares I needed. I will try to build the system up to be as polished as it can be. The packages in the home.nix is more just personal softwares, not really necessary for the system. Although some of the customising of some softwares like helic and yazi is done through home-manager.
+It is a simple  setup with Cosmic DE, Helix as the code editor, Warp as the terminal. And a bunch of other random softwares I needed. I will try to build the system up to be as polished as it can be. The packages in the home.nix is more just personal softwares, not really necessary for the system. Although some of the customising of some softwares like helix and yazi is done through home-manager.
 
 I aim for a cyberpunk aesthetic as that's what I love. It is not completely there yet, but we will see.
-There is a cosmic theme file in the main directory, that has to be imported in COsmic Appearance settings to get the color scheme.
+There is a cosmic theme file in the main directory, that has to be imported in Cosmic Appearance settings to get the color scheme.
 
 > ## Managing `local/local-hardware.nix` in Nix Flakes
 
