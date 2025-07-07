@@ -17,7 +17,23 @@
     tree
     libnotify
     vlc
-    inputs.zen-browser.packages."${system}".default
+    (pkgs.writeDerivation {
+      name = "zen-browser-desktop";
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/share/applications
+        cat > $out/share/applications/zen-browser.desktop << EOF
+        [Desktop Entry]
+        Name=Zen Browser
+        Exec=${inputs.zen-browser.packages."${system}".default}/bin/zen %
+
+        Type=Application
+        Terminal=false
+        Categories=Network;WebBrowser;
+        MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
+        EOF
+      '';
+    })
     nodejs
     nodePackages.npm
     fd

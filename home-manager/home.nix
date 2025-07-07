@@ -48,7 +48,7 @@
     };
   };
   home.sessionVariables = {
-    TERMINAL = "warp-terminal";
+    # TERMINAL = "warp-terminal"; # added it to xdg.nix
     # NIXOS_OZONE_WL = "1";
     # PATH = "$HOME/.local/bin:$PATH";
   };

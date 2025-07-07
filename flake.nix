@@ -59,6 +59,7 @@
           ./modules.nix
           ./cache.nix
           /home/necryl/nixos-config/local/local-hardware.nix
+          ./xdg.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
