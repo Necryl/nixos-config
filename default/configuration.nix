@@ -63,6 +63,10 @@ in
       (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
     ]; # Provide the theme package
   };
+  boot.initrd = {
+    verbose = false;
+    systemd.enable = true; # Keep early Plymouth support
+  };
 
   boot.kernelParams = [
     "nohibernate" # Disable hibernation in the kernel
