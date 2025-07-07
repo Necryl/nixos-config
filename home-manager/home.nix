@@ -14,6 +14,7 @@
     ./modules/warp-terminal.nix
     ./modules/git.nix
     ./modules/yazi.nix
+    ./modules/xdg.nix
   ];
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
@@ -48,7 +49,7 @@
     };
   };
   home.sessionVariables = {
-    # TERMINAL = "warp-terminal"; # added it to xdg.nix
+    TERMINAL = "warp-terminal";
     # NIXOS_OZONE_WL = "1";
     # PATH = "$HOME/.local/bin:$PATH";
   };

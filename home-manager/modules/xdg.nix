@@ -6,6 +6,7 @@
   ...
 }:
 {
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
@@ -36,5 +37,4 @@
     };
   };
 
-  environment.variables.TERMINAL = "warp-terminal";
 }
