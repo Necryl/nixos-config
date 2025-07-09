@@ -37,7 +37,6 @@
     inkscape
     microsoft-edge
     discord-canary
-    distrobox
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config

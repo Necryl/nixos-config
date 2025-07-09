@@ -53,6 +53,7 @@
     cosmic-ext-tweaks
     cosmic-ext-calculator
     cosmic-wallpapers
+    distrobox
   ];
 
   fonts.packages = with pkgs; [
