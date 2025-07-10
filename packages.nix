@@ -54,7 +54,7 @@
     cosmic-ext-calculator
     cosmic-wallpapers
     distrobox
-    p7zip
+    p7zip-rar
   ];
 
   fonts.packages = with pkgs; [
