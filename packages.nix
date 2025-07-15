@@ -31,8 +31,6 @@
       '';
     })
 
-    nodejs
-    nodePackages.npm
     fd
     fzf
     mission-center

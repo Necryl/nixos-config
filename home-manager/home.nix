@@ -27,7 +27,6 @@
     ueberzugpp # image rednering support for yazi
     brave
     nodejs
-    nodePackages.npm
     nodePackages.svelte-language-server # Svelte LSP
     nodePackages.typescript-language-server # JS and TS LSP
     nodePackages.vscode-langservers-extracted # JSON LSP
