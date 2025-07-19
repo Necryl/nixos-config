@@ -57,6 +57,7 @@
     kdePackages.dolphin
     kdePackages.dolphin-plugins
     kdePackages.ark
+    kdePackages.konsole
   ];
 
   fonts.packages = with pkgs; [
