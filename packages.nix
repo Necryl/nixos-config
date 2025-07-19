@@ -53,6 +53,10 @@
     cosmic-wallpapers
     distrobox
     p7zip-rar
+
+    kdePackages.dolphin
+    kdePackages.dolphin-plugins
+    kdePackages.ark
   ];
 
   fonts.packages = with pkgs; [
