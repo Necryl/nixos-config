@@ -46,11 +46,7 @@
     libreoffice
     foot
     gparted
-    xdg-desktop-portal
-    xdg-desktop-portal-cosmic
-    cosmic-ext-tweaks
     cosmic-ext-calculator
-    cosmic-wallpapers
     distrobox
     p7zip-rar
 

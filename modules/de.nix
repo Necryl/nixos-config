@@ -21,18 +21,15 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-cosmic ];
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-cosmic
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-kde
+    ];
     config = {
       common = {
         default = [ "cosmic" ];
       };
     };
-  };
-
-  environment.sessionVariables = {
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "COSMIC";
-    COSMIC_DATA_CONTROL_ENABLED = 1;
-
   };
 }
