@@ -1,20 +1,4 @@
 {
-  "642854b5-88b4-4c40-b256-e035532109df": {
-    "id": "642854b5-88b4-4c40-b256-e035532109df",
-    "name": "Transparent Zen",
-    "description": "Make the Zen Browser's tab background transparent, get smooth animations and more. Enable  features in mod settings and visit the homepage below to learn more about the features. 👇",
-    "homepage": "https://github.com/sameerasw/zen-themes/tree/main/TransparentZen",
-    "style": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/chrome.css",
-    "readme": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/readme.md",
-    "image": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/image.png",
-    "author": "sameerasw",
-    "version": "1.13.0",
-    "tags": [],
-    "createdAt": "2025-02-04",
-    "updatedAt": "2025-06-22",
-    "preferences": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/preferences.json",
-    "enabled": true
-  },
   "fd24f832-a2e6-4ce9-8b19-7aa888eb7f8e": {
     "id": "fd24f832-a2e6-4ce9-8b19-7aa888eb7f8e",
     "name": "Quietify",
@@ -28,21 +12,6 @@
     "tags": [],
     "createdAt": "2024-12-17",
     "updatedAt": "2025-02-09",
-    "enabled": true
-  },
-  "ae7868dc-1fa1-469e-8b89-a5edf7ab1f24": {
-    "id": "ae7868dc-1fa1-469e-8b89-a5edf7ab1f24",
-    "name": "Load Bar",
-    "description": "Creates a sleek loading bar and mute status for single toolbar mode.",
-    "homepage": "https://github.com/Tanay-Kar/Zen-Themes/tree/main/LoadBar",
-    "style": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/chrome.css",
-    "readme": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/readme.md",
-    "image": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/image.png",
-    "author": "Tanay-Kar",
-    "version": "1.0.0",
-    "tags": [],
-    "createdAt": "2024-12-21",
-    "updatedAt": "2025-05-10",
     "enabled": true
   },
   "a5f6a231-e3c8-4ce8-8a8e-3e93efd6adec": {
@@ -59,6 +28,37 @@
     "tags": [],
     "createdAt": "2024-11-01",
     "updatedAt": "2025-03-09",
+    "enabled": true
+  },
+  "642854b5-88b4-4c40-b256-e035532109df": {
+    "id": "642854b5-88b4-4c40-b256-e035532109df",
+    "name": "Transparent Zen",
+    "description": "Make the Zen Browser's tab background transparent, get smooth animations and more. Enable  features in mod settings and visit the homepage below to learn more about the features. 👇",
+    "homepage": "https://github.com/sameerasw/zen-themes/tree/main/TransparentZen",
+    "style": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/chrome.css",
+    "readme": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/readme.md",
+    "image": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/image.png",
+    "author": "sameerasw",
+    "version": "1.13.0",
+    "tags": [],
+    "createdAt": "2025-02-04",
+    "updatedAt": "2025-06-22",
+    "preferences": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/642854b5-88b4-4c40-b256-e035532109df/preferences.json",
+    "enabled": true
+  },
+  "ae7868dc-1fa1-469e-8b89-a5edf7ab1f24": {
+    "id": "ae7868dc-1fa1-469e-8b89-a5edf7ab1f24",
+    "name": "Load Bar",
+    "description": "Creates a sleek loading bar and mute status for single toolbar mode.",
+    "homepage": "https://github.com/Tanay-Kar/Zen-Themes/tree/main/LoadBar",
+    "style": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/chrome.css",
+    "readme": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/readme.md",
+    "image": "https://raw.githubusercontent.com/zen-browser/theme-store/main/themes/ae7868dc-1fa1-469e-8b89-a5edf7ab1f24/image.png",
+    "author": "Tanay-Kar",
+    "version": "1.0.0",
+    "tags": [],
+    "createdAt": "2024-12-21",
+    "updatedAt": "2025-05-10",
     "enabled": true
   }
 }
