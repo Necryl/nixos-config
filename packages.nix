@@ -49,6 +49,7 @@
     cosmic-ext-calculator
     distrobox
     p7zip-rar
+    efibootmgr
 
     kdePackages.dolphin
     kdePackages.dolphin-plugins
