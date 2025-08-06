@@ -15,6 +15,7 @@
     ./modules/git.nix
     ./modules/yazi.nix
     ./modules/xdg.nix
+    ./modules/foot.nix
   ];
   home.username = "necryl"; # Replace with your username
   home.homeDirectory = "/home/necryl";
