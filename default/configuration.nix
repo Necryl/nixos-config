@@ -194,6 +194,8 @@ in
     dockerCompat = true;
   };
 
+  nix.settings.download-buffer-size = 524288000;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
