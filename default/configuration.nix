@@ -138,8 +138,17 @@ in
     variant = "";
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # Enable CUPS and avahi to print documents.
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplip ];
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # Enable mDNS for hostname resolution
+    openFirewall = true; # Open firewall for mDNS
+  };
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
