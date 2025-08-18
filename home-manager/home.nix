@@ -38,6 +38,7 @@
     microsoft-edge
     discord-canary
     dupeguru
+    krita
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
