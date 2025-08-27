@@ -50,6 +50,14 @@
       new = "touch";
     };
   };
+
+  programs.ssh = {
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      addKeysToAgent = "yes";
+    };
+  };
+
   home.sessionVariables = {
     TERMINAL = "warp-terminal";
     # NIXOS_OZONE_WL = "1";

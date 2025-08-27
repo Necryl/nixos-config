@@ -205,15 +205,6 @@ in
 
   nix.settings.download-buffer-size = 524288000;
 
-  programs.ssh = {
-    enable = true;
-    enableDefaultConfig = false;
-    matchBlocks."*" = {
-      # Put any SSH defaults you want here
-      # Most people can leave this empty to start
-    };
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
