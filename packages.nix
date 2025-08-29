@@ -55,6 +55,24 @@
     kdePackages.dolphin-plugins
     kdePackages.ark
     kdePackages.konsole
+    kdePackages.kio-fuse # to mount remote filesystems via FUSE
+    kdePackages.kio-extras # extra protocols support (sftp, fish and more)
+    kdePackages.qtsvg
+    kdePackages.audiocd-kio
+    kdePackages.baloo
+    kdePackages.kio-admin
+    kdePackages.kio-gdrive
+    kdePackages.kompare
+    kdePackages.ffmpegthumbs
+    icoutils
+    kdePackages.kdegraphics-thumbnailers
+    kdePackages.kimageformats
+    libappimage
+    resvg
+    kdePackages.taglib
+    kdePackages.kservice
+    kdePackages.qt6ct
+    kdePackages.qtstyleplugin-kvantum
   ];
 
   fonts.packages = with pkgs; [
