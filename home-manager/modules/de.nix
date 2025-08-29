@@ -34,4 +34,13 @@ in
       };
     }
   ];
+
+  # Enable Qt theming
+  qt = {
+    enable = true;
+    platformTheme = "qtct";
+    style = {
+      name = "kvantum";
+    };
+  };
 }

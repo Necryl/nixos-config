@@ -34,6 +34,6 @@
   };
   nixpkgs.config.qt6 = {
     enable = true;
-    platformTheme = "qt6ct";
+    platformTheme = "qtct";
   };
 }
