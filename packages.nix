@@ -17,20 +17,7 @@
     tree
     libnotify
     vlc
-    (writeTextFile {
-      name = "zen-browser-desktop";
-      destination = "/share/applications/zen-browser.desktop";
-      text = ''
-        [Desktop Entry]
-        Name=Zen Browser
-        Exec=${inputs.zen-browser.packages."${system}".default}/bin/zen %U
-        Type=Application
-        Terminal=false
-        Categories=Network;WebBrowser;
-        MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
-      '';
-    })
-
+    inputs.zen-browser.packages."${system}".default
     fd
     fzf
     mission-center
