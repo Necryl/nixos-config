@@ -39,6 +39,7 @@
     discord-canary
     dupeguru
     krita
+    vscode
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
