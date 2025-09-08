@@ -60,6 +60,7 @@
     kdePackages.kservice
     kdePackages.qt6ct
     kdePackages.qtstyleplugin-kvantum
+    kdePackages.breeze-icons
   ];
 
   fonts.packages = with pkgs; [
