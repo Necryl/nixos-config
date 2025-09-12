@@ -19,6 +19,10 @@
         home-manager.follows = "home-manager";
       };
     };
+    cybergrub-theme = {
+      url = "github:Necryl/CyberPunk-GRUB";
+      flake = false;
+    };
   };
 
   outputs =
@@ -29,6 +33,7 @@
       warp-terminal-theme,
       zen-browser,
       cosmic-manager,
+      cybergrub-theme,
       ...
     }@inputs:
     let
