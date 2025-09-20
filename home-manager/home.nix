@@ -26,7 +26,6 @@
     imagemagick # Provides 'magick'/'convert'
     obsidian
     ueberzugpp # image rednering support for yazi
-    brave
     nodejs
     nodePackages.svelte-language-server # Svelte LSP
     nodePackages.typescript-language-server # JS and TS LSP
