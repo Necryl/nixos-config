@@ -39,6 +39,7 @@
     dupeguru
     krita
     vscode
+    gimp3-with-plugins
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
