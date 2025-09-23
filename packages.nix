@@ -28,7 +28,7 @@
     (adi1090x-plymouth-themes.override { selected_themes = [ "spinner_alt" ]; })
     pciutils
     usbutils
-    wineWowPackages.stable
+    wineWowPackages.waylandFull
     nomacs
     libreoffice
     foot
@@ -37,6 +37,7 @@
     distrobox
     p7zip-rar
     efibootmgr
+    inputs.nix-alien.packages.${pkgs.system}.default
 
     kdePackages.dolphin
     kdePackages.dolphin-plugins

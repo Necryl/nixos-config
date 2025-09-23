@@ -23,6 +23,7 @@
       url = "github:Necryl/CyberPunk-GRUB";
       flake = false;
     };
+    nix-alien.url = "github:thiagokokada/nix-alien";
   };
 
   outputs =
@@ -34,6 +35,7 @@
       zen-browser,
       cosmic-manager,
       cybergrub-theme,
+      nix-alien,
       ...
     }@inputs:
     let
