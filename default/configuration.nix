@@ -193,6 +193,11 @@ in
     ];
   };
 
+  # avoid pid file error
+  systemd.services.avahi-daemon.serviceConfig = {
+    ExecStartPre = "+${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid";
+  };
+
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
