@@ -44,4 +44,8 @@ in
     };
   };
 
+  services.cliphist = {
+    enable = true;
+    allowImages = true; # Store image data as well as text
+  };
 }

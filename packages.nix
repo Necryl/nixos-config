@@ -38,6 +38,8 @@
     p7zip-rar
     efibootmgr
     inputs.nix-alien.packages.${pkgs.system}.default
+    cliphist
+    wofi
 
     kdePackages.dolphin
     kdePackages.dolphin-plugins
