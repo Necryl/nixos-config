@@ -27,11 +27,11 @@
     "cybergrub-theme": {
       "flake": false,
       "locked": {
-        "lastModified": 1758908174,
-        "narHash": "sha256-RFsuJzn0OMKrovNz44HqqiKaCEDmIkzRD+PWAz2h9Kk=",
+        "lastModified": 1758909830,
+        "narHash": "sha256-dKRjxdpV6ezGGhh7wDsc7ZssOD4z0sB6buNx9RD1S4E=",
         "owner": "Necryl",
         "repo": "CyberPunk-GRUB",
-        "rev": "fb6c8c066cd0c4d7ea21a99ed3f0caba703491d6",
+        "rev": "6dd3a9e709008217a9b85e56bf73d2b9bd1064c5",
         "type": "github"
       },
       "original": {
