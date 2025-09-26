@@ -27,11 +27,11 @@
     "cybergrub-theme": {
       "flake": false,
       "locked": {
-        "lastModified": 1758887305,
-        "narHash": "sha256-An/NNJkr5IRgG51d/WC++GpDH+6Xn5sH/KbyMmqcPuo=",
+        "lastModified": 1758908174,
+        "narHash": "sha256-RFsuJzn0OMKrovNz44HqqiKaCEDmIkzRD+PWAz2h9Kk=",
         "owner": "Necryl",
         "repo": "CyberPunk-GRUB",
-        "rev": "e54840961c5d762756a9f8e5109c4ef88c4e8aff",
+        "rev": "fb6c8c066cd0c4d7ea21a99ed3f0caba703491d6",
         "type": "github"
       },
       "original": {
@@ -83,11 +83,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758876467,
-        "narHash": "sha256-ueGMsCYo6S6WiszKPpXoRCdMDVmsCwfA09L7blUEPlY=",
+        "lastModified": 1758899649,
+        "narHash": "sha256-Z6IxPlvIS83lKbTIliP2xFj4hJ699/eM7Ubte4iytgQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "173a29f735c69950cfeaac310d7e567115976be0",
+        "rev": "6238bbc0ae04951b64a3ad1b69d3e03b8b329e51",
         "type": "github"
       },
       "original": {
