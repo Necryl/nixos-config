@@ -21,8 +21,11 @@ in
     useOSProber = false; # Optional: Detect other operating systems
 
     # Flexible resolution detection for both UEFI and BIOS
-    gfxmodeEfi = "auto"; # Used if system boots in UEFI mode
-    gfxmodeBios = "auto"; # Used if system boots in BIOS mode
+    gfxmodeEfi = "1920x1080,1600x900,1280x720,auto";
+    gfxmodeBios = "1920x1080,1600x900,1280x720,auto";
+
+    gfxpayloadEfi = "keep";
+    gfxpayloadBios = "keep";
 
     # Set the theme
     theme = "${cybergrub-theme}/CyberGRUB-2077";
@@ -38,9 +41,6 @@ in
       insmod all_video
       insmod gfxterm
 
-      # Try 1920x1080, fall back to auto if it fails
-      set gfxmode=1920x1080,auto
-      set gfxpayload=keep
 
       terminal_output console
       terminal_output gfxterm
