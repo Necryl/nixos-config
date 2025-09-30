@@ -41,6 +41,9 @@
     cliphist
     wofi
 
+    fbterm
+    fbida
+
     kdePackages.dolphin
     kdePackages.dolphin-plugins
     kdePackages.ark
