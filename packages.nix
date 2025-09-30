@@ -42,7 +42,8 @@
     wofi
 
     fbterm
-    fbida
+    fbv
+    terminus_font
 
     kdePackages.dolphin
     kdePackages.dolphin-plugins

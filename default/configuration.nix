@@ -83,6 +83,29 @@ in
     timeout = 5; # Keep GRUB visible for 5 seconds
   };
 
+  # Set the console font to Terminus
+  console.font = "ter-v16n";
+
+  # Set the 16-color TTY palette
+  console.colors = [
+    "010614"
+    "ff8c35"
+    "38ffc9"
+    "ffdb1a"
+    "ec8129"
+    "7208f4"
+    "2ba5ff"
+    "73B2FF"
+    "3e7bdc"
+    "ff7200"
+    "00fdbb"
+    "7300ff"
+    "ec8129"
+    "fdd600"
+    "5db6ff"
+    "E8F2FF"
+  ];
+
   # garbage collection
   nix.gc = {
     automatic = true;
