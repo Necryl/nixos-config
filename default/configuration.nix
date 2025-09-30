@@ -26,6 +26,7 @@ in
 
     # Set the theme
     theme = "${cybergrub-theme}/CyberGRUB-2077";
+    splashImage = ../images/NixOS_Backdrop.png;
 
     extraConfig = ''
       # Load modules based on platform (UEFI or BIOS)
