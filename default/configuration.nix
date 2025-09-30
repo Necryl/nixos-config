@@ -172,6 +172,7 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "video"
     ];
     packages = with pkgs; [
       #  thunderbird
