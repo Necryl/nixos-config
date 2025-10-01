@@ -40,6 +40,8 @@
     krita
     vscode
     gimp3-with-plugins
+
+    prismlauncher
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
