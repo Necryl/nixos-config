@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# This script automates the NixOS update process for a configuration managed in a Git repository.
-# It checks for local and remote changes, updates flake inputs, rebuilds the system,
-# and commits/pushes the changes.
-
-# Exit immediately if a command exits with a non-zero status.
 set -e
 
 # --- 1. Pre-flight Check: Ensure Git Working Directory is Clean ---
@@ -17,23 +12,16 @@ echo "✅ Git working directory is clean."
 
 # --- 2. Remote Status Check & Optional Pull ---
 echo "Checking for remote updates..."
-# Fetches the latest state from all remotes without merging
 git remote update
-
-# Check if the local branch is behind its upstream counterpart
 if git status -uno | grep -q "Your branch is behind"; then
     echo "⚠️ Your local branch is behind the remote."
-    
-    # List files that would be changed by a pull
     AFFECTED_FILES=$(git diff --name-only HEAD..@{u})
     echo "The following files will be affected by a 'git pull':"
     echo "----------------------------------------------------"
     echo "$AFFECTED_FILES"
     echo "----------------------------------------------------"
-
     read -p "Do you want to pull these changes before updating? (y/N): " PULL_CHOICE
     if [[ "$PULL_CHOICE" =~ ^[Yy]$ ]]; then
-        # Specific warning if flake.lock is about to be pulled
         if echo "$AFFECTED_FILES" | grep -q "flake.lock"; then
             echo "🚨 WARNING: 'flake.lock' is among the remote changes."
             echo "Pulling it may cause a merge conflict with the 'nix flake update' command."
@@ -43,14 +31,10 @@ if git status -uno | grep -q "Your branch is behind"; then
             else
                  echo "Pulling changes from remote..."
                  git pull
-                 echo "Log: Files updated from remote:"
-                 echo "$AFFECTED_FILES"
             fi
         else
             echo "Pulling changes from remote..."
             git pull
-            echo "Log: Files updated from remote:"
-            echo "$AFFECTED_FILES"
         fi
     else
         echo "Skipping pull. Continuing update with local configuration."
@@ -59,42 +43,43 @@ else
     echo "✅ Your local configuration is up to date with the remote."
 fi
 
-
 # --- 3. Update Flake Inputs ---
 echo "Updating flake inputs..."
-if sudo nix flake update; then
-    echo "✅ Flake inputs updated successfully."
-else
+if ! sudo nix flake update; then
     echo "❌ 'nix flake update' failed. Aborting."
     exit 1
 fi
+echo "✅ Flake inputs updated successfully."
 
 # --- 4. Rebuild the System ---
 echo "Rebuilding the NixOS system..."
-if sudo nixos-rebuild switch --flake . --impure; then
-    echo "✅ System rebuild successful."
-else
+if ! sudo nixos-rebuild switch --flake . --impure; then
     echo "❌ System rebuild failed. The previous configuration is still active. Aborting git commit."
     exit 1
 fi
+echo "✅ System rebuild successful."
 
-# --- 5. Commit the Update ---
-echo "Committing the successful update..."
-git add .
-git commit -m "update"
+# --- 5. Commit and Push (Only if changes exist) ---
+# Check if git status has any output (meaning there are changes)
+if [[ -n $(git status --porcelain) ]]; then
+    echo "File changes detected. Committing the update..."
+    git add .
+    git commit -m "update: automatic system update"
 
-# --- 6. Optional Push to Remote ---
-read -p "Push update to remote? (y/N): " PUSH_CHOICE
-if [[ "$PUSH_CHOICE" =~ ^[Yy]$ ]]; then
-    echo "Pushing changes to remote..."
-    if git push; then
-        echo "✅ Pushed successfully."
+    read -p "Push update to remote? (y/N): " PUSH_CHOICE
+    if [[ "$PUSH_CHOICE" =~ ^[Yy]$ ]]; then
+        echo "Pushing changes to remote..."
+        if git push; then
+            echo "✅ Pushed successfully."
+        else
+            echo "❌ Git push failed."
+            exit 1
+        fi
     else
-        echo "❌ Git push failed."
-        exit 1
+        echo "Skipping push. The update is committed locally."
     fi
 else
-    echo "Skipping push. The update is committed locally."
+    echo "✅ No file changes to commit. System was already up-to-date."
 fi
 
 echo "🎉 NixOS update process complete."
