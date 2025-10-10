@@ -21,23 +21,21 @@ C_BLUE='\033[0;34m'
 
 # --- 1. Variable Defaults & Flag Parsing ---
 AUTO_YES=false
-# REBUILD_STRATEGY is empty by default, so we know to prompt the user later.
 REBUILD_STRATEGY=""
 
-# Use a while loop to handle flags professionally
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -y|--yes)
             AUTO_YES=true
-            shift # past argument
+            shift
             ;;
         --switch)
             REBUILD_STRATEGY="switch"
-            shift # past argument
+            shift
             ;;
         --boot)
             REBUILD_STRATEGY="boot"
-            shift # past argument
+            shift
             ;;
         *)
             echo "Unknown option: $1"
@@ -48,7 +46,6 @@ done
 
 if [ "$AUTO_YES" = true ]; then
     echo -e "${C_GREEN}✅ Running in non-interactive mode.${C_RESET}"
-    # If no strategy flag was specified with -y, default to 'boot' for safety.
     if [[ -z "$REBUILD_STRATEGY" ]]; then
         REBUILD_STRATEGY="boot"
     fi
@@ -57,22 +54,20 @@ if [ "$AUTO_YES" = true ]; then
     echo "--------------------------------------------------------"
 fi
 
-
-# --- 2. Pre-flight Check: Ensure Git Working Directory is Clean ---
+# --- 2. Pre-flight Check ---
 if [[ -n $(git status --porcelain) ]]; then
     echo -e "${C_RED}❌ Error: Uncommitted changes detected.${C_RESET}"
     exit 1
 fi
 echo -e "${C_GREEN}✅ Git working directory is clean.${C_RESET}"
 
-# --- 3. Remote Status Check & Optional Pull ---
-# This section's logic is sound and remains unchanged
+# --- 3. Remote Status Check ---
 if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     git remote update &>/dev/null
     if git status -uno | grep -q "Your branch is behind"; then
         echo -e "${C_YELLOW}⚠️ Your local branch is behind the remote.${C_RESET}"
         if [ "$AUTO_YES" = true ] || \
-           (read -p "Pull remote changes? (y/N): " pull && [[ "$pull" =~ ^[Yy]$ ]]); then
+           (read -p "Pull remote changes? (Y/n): " pull && [[ "$pull" =~ ^[Yy]?$ ]]); then
             echo "Pulling changes..."
             git pull
         fi
@@ -81,14 +76,14 @@ fi
 
 # --- 4. Optional: Update Flake Inputs ---
 if [ "$AUTO_YES" = true ] || \
-   ! (read -p "Do you want to SKIP the flake update? (y/N): " skip && [[ "$skip" =~ ^[Yy]$ ]]); then
+   (read -p "Do you want to SKIP the flake update? (Y/n): " skip && [[ "$skip" =~ ^[Yy]?$ ]]); then
+    echo "Skipping flake update as requested."
+else
     echo "Updating flake inputs..."
     if ! sudo nix flake update; then
         echo -e "${C_RED}❌ 'nix flake update' failed. Aborting.${C_RESET}"
         exit 1
     fi
-else
-    echo "Skipping flake update as requested."
 fi
 
 # --- 5. Conditional Rebuild ---
@@ -102,17 +97,15 @@ if [[ -z $(git status --porcelain) ]]; then
 fi
 
 # --- 6. Choose Rebuild Strategy & Rebuild ---
-# If the strategy was not set by a --switch or --boot flag, prompt the user.
 if [[ -z "$REBUILD_STRATEGY" ]]; then
     echo -e "${C_BLUE}Please choose the activation strategy:${C_RESET}"
-    echo "  1) switch: Immediately activate the new configuration. (Default)"
-    echo "  2) boot:   Activate on the next reboot. (Safer for major changes)"
-    read -p "Enter choice [1]: " rebuild_choice
-    if [[ "$rebuild_choice" == "2" ]]; then
-        REBUILD_STRATEGY="boot"
-    else
-        # This is the default for the interactive prompt if the user just presses Enter.
+    echo "  1) switch: Immediately activate the new configuration."
+    echo "  2) boot:   Activate on the next reboot. (Safer - Default)"
+    read -p "Enter choice [2]: " rebuild_choice
+    if [[ "$rebuild_choice" == "1" ]]; then
         REBUILD_STRATEGY="switch"
+    else
+        REBUILD_STRATEGY="boot"
     fi
 fi
 
@@ -129,7 +122,7 @@ if [[ -n $(git status --porcelain) ]]; then
     git commit -m "update: automatic system update"
 
     if [ "$AUTO_YES" = true ] || \
-       (read -p "Push update to remote? (y/N): " push && [[ "$push" =~ ^[Yy]$ ]]); then
+       (read -p "Push update to remote? (Y/n): " push && [[ "$push" =~ ^[Yy]?$ ]]); then
         echo "Pushing changes to remote..."
         git push
     fi
