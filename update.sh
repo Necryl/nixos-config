@@ -19,7 +19,15 @@ C_GREEN='\033[0;32m'
 C_YELLOW='\033[0;33m'
 C_BLUE='\033[0;34m'
 
-# --- 1. Variable Defaults & Flag Parsing ---
+# --- 1. Sudo Check ---
+if [[ "$EUID" -eq 0 ]]; then
+    echo -e "${C_YELLOW}⚠️  Warning: Running this script with sudo is not recommended.${C_RESET}"
+    echo "This can cause issues with Git authentication (SSH keys) and file permissions."
+    echo "The script will attempt to continue, but it may fail."
+    echo "--------------------------------------------------------"
+fi
+
+# --- 2. Variable Defaults & Flag Parsing ---
 AUTO_YES=false
 REBUILD_STRATEGY=""
 
@@ -54,14 +62,15 @@ if [ "$AUTO_YES" = true ]; then
     echo "--------------------------------------------------------"
 fi
 
-# --- 2. Pre-flight Check ---
+
+# --- 3. Pre-flight Check ---
 if [[ -n $(git status --porcelain) ]]; then
     echo -e "${C_RED}❌ Error: Uncommitted changes detected.${C_RESET}"
     exit 1
 fi
 echo -e "${C_GREEN}✅ Git working directory is clean.${C_RESET}"
 
-# --- 3. Remote Status Check ---
+# --- 4. Remote Status Check ---
 if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     git remote update &>/dev/null
     if git status -uno | grep -q "Your branch is behind"; then
@@ -74,7 +83,7 @@ if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     fi
 fi
 
-# --- 4. Optional: Update Flake Inputs ---
+# --- 5. Optional: Update Flake Inputs ---
 if [ "$AUTO_YES" = true ] || \
    (read -p "Do you want to SKIP the flake update? (Y/n): " skip && [[ "$skip" =~ ^[Yy]?$ ]]); then
     echo "Skipping flake update as requested."
@@ -86,7 +95,7 @@ else
     fi
 fi
 
-# --- 5. Conditional Rebuild ---
+# --- 6. Conditional Rebuild ---
 if [[ -z $(git status --porcelain) ]]; then
     if [ "$AUTO_YES" = true ] || \
        (read -p "No file changes to apply. Skip the system rebuild? (Y/n): " skip && [[ "$skip" =~ ^[Yy]?$ ]]); then
@@ -96,7 +105,7 @@ if [[ -z $(git status --porcelain) ]]; then
     fi
 fi
 
-# --- 6. Choose Rebuild Strategy & Rebuild ---
+# --- 7. Choose Rebuild Strategy & Rebuild ---
 if [[ -z "$REBUILD_STRATEGY" ]]; then
     echo -e "${C_BLUE}Please choose the activation strategy:${C_RESET}"
     echo "  1) switch: Immediately activate the new configuration."
@@ -116,7 +125,7 @@ if ! sudo nixos-rebuild "$REBUILD_STRATEGY" --flake . --impure; then
 fi
 echo -e "${C_GREEN}✅ System rebuild successful.${C_RESET}"
 
-# --- 7. Commit and Push ---
+# --- 8. Commit and Push ---
 if [[ -n $(git status --porcelain) ]]; then
     git add .
     git commit -m "update: automatic system update"
@@ -128,7 +137,7 @@ if [[ -n $(git status --porcelain) ]]; then
     fi
 fi
 
-# --- 8. Final Message ---
+# --- 9. Final Message ---
 echo -e "${C_GREEN}🎉 NixOS update process complete.${C_RESET}"
 if [[ "$REBUILD_STRATEGY" == "switch" ]]; then
     echo -e "${C_BLUE}💡 If you encounter issues, you can roll back with: sudo nixos-rebuild switch --rollback${C_RESET}"
