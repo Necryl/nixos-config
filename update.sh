@@ -3,7 +3,7 @@
 # This script automates the NixOS update process.
 # Usage:
 #   bash update.sh      - Run in interactive mode.
-#   bash update.sh -y   - Run in non-interactive mode, answering 'yes' to all prompts.
+#   bash update.sh -y   - Run in non-interactive mode with special behaviors.
 
 set -e
 
@@ -14,7 +14,8 @@ if [[ "$1" == "-y" ]]; then
     echo "✅ Running in non-interactive mode (-y flag detected)."
     echo "This means:"
     echo "  - Remote changes will be pulled automatically."
-    echo "  - The system rebuild will be skipped automatically if no updates are found."
+    echo "  - The flake update will be SKIPPED automatically."
+    echo "  - The system rebuild will be skipped automatically if no other changes are found."
     echo "  - Successful updates will be pushed to the remote repository automatically."
     echo "--------------------------------------------------------"
 fi
@@ -71,11 +72,27 @@ else
     echo "✅ Your local configuration is up to date with the remote."
 fi
 
-# --- 4. Update Flake Inputs ---
-echo "Updating flake inputs..."
-if ! sudo nix flake update; then
-    echo "❌ 'nix flake update' failed. Aborting."
-    exit 1
+# --- 4. Optional: Update Flake Inputs ---
+SKIP_FLAKE_UPDATE="n" # Default action is to NOT skip the update.
+if [ "$AUTO_YES" = true ]; then
+    echo "'-y' flag detected. Automatically SKIPPING flake update."
+    SKIP_FLAKE_UPDATE="y" # With -y, we now skip this step.
+else
+    # Ask the user if they want to skip. Default is NO.
+    read -p "Do you want to SKIP the flake update? (y/N): " user_skip_choice
+    if [[ "$user_skip_choice" =~ ^[Yy]$ ]]; then
+        SKIP_FLAKE_UPDATE="y"
+    fi
+fi
+
+if [[ "$SKIP_FLAKE_UPDATE" == "n" ]]; then
+    echo "Updating flake inputs..."
+    if ! sudo nix flake update; then
+        echo "❌ 'nix flake update' failed. Aborting."
+        exit 1
+    fi
+else
+    echo "Skipping flake update as requested."
 fi
 
 # --- 5. Conditional Rebuild ---
