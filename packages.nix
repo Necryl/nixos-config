@@ -68,6 +68,8 @@
     kdePackages.qt6ct
     kdePackages.qtstyleplugin-kvantum
     kdePackages.breeze-icons
+
+    nushell
   ];
 
   fonts.packages = with pkgs; [
