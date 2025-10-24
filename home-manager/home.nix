@@ -41,6 +41,7 @@
     vscode
     gimp3-with-plugins
     code-cursor
+    tmux
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
