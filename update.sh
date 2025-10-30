@@ -203,7 +203,15 @@ else
                 exit 1
             fi
             print_success "Flake inputs updated"
-            FLAKE_WAS_UPDATED=true
+            
+            # Commit flake.lock immediately after update
+            if [[ -n $(git status --porcelain) ]]; then
+                echo -e "  ${C_DIM}Committing flake.lock...${C_RESET}"
+                git add flake.lock
+                git commit -m "update: flake inputs updated"
+                print_success "Flake changes committed"
+                FLAKE_WAS_UPDATED=true
+            fi
         else
             print_info "Skipped flake update"
         fi
@@ -251,13 +259,8 @@ print_success "System rebuild successful"
 # --- 8. Commit and Push Logic ---
 print_header "Finalizing changes"
 
-# Only auto-commit if flake was updated (which means git was clean before)
-if [ "$FLAKE_WAS_UPDATED" = true ] && [[ -n $(git status --porcelain) ]]; then
-    echo -e "  ${C_DIM}Committing flake input updates...${C_RESET}"
-    git add .
-    git commit -m "update: flake inputs updated"
-    print_success "Flake updates committed"
-
+# Only prompt to push if flake was updated and committed
+if [ "$FLAKE_WAS_UPDATED" = true ]; then
     if [ "$AUTO_YES" = true ] || prompt "Push changes to remote?" "n"; then
         echo -e "  ${C_DIM}Pushing to remote...${C_RESET}"
         git push
