@@ -7,8 +7,10 @@
         email = "74096664+Necryl@users.noreply.github.com";
       };
     };
-    init.defaultBranch = "main";
-    pull.rebase = true;
+    config = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+    };
   };
   programs.ssh = {
     enable = true;
