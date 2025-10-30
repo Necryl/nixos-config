@@ -52,13 +52,13 @@
     shellAliases = {
       new = "touch";
     };
-    initExtra = ''
-      if [ "$TERM" = "foot" ]; then
-        if [ -z "$TMUX" ]; then
-          exec tmux -u
-        fi
-      fi
-    '';
+    # initExtra = ''
+    #   if [ "$TERM" = "foot" ]; then
+    #     if [ -z "$TMUX" ]; then
+    #       exec tmux -u
+    #     fi
+    #   fi
+    # '';
   };
 
   programs.ssh = {
@@ -74,24 +74,14 @@
       set -g mouse on
       set -g default-terminal "xterm-256color"
       set -as terminal-overrides ",xterm-256color:Tc"
+      set -g default-command ${pkgs.fish}/bin/fish
     '';
   };
 
-  home.sessionVariables = {
-    TERMINAL = "warp-terminal";
-    # NIXOS_OZONE_WL = "1";
-    # PATH = "$HOME/.local/bin:$PATH";
-  };
+  programs.fish.enable = true;
 
-  # xdg.mimeApps = {
-  #   enable = true;
-  #   defaultApplications = {
-  #     "application/vnd.oasis.opendocument.spreadsheet" = "org.gnumeric.gnumeric.desktop";
-  #     "application/vnd.ms-excel" = "org.gnumeric.gnumeric.desktop";
-  #     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" =
-  #       "org.gnumeric.gnumeric.desktop";
-  #     "text/csv" = "org.gnumeric.gnumeric.desktop";
-  #   };
-  # };
+  home.sessionVariables = {
+    TERMINAL = "foot";
+  };
 
 }
