@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 # This script automates the NixOS update process.
@@ -17,15 +16,68 @@ set -euo pipefail
 C_RESET='\033[0m'
 C_RED='\033[0;31m'
 C_GREEN='\033[0;32m'
-C_YELLOW='\033[0;33m'
-C_BLUE='\033[0;34m'
+C_YELLOW='\033[1;33m'
+C_BLUE='\033[0;36m'
+C_MAGENTA='\033[0;35m'
+C_BOLD='\033[1m'
+C_DIM='\033[2m'
+
+# --- Helper Functions ---
+print_header() {
+    echo ""
+    echo -e "${C_BOLD}${C_MAGENTA}▸ $1${C_RESET}"
+}
+
+print_success() {
+    echo -e "${C_GREEN}✓${C_RESET} $1"
+}
+
+print_error() {
+    echo -e "${C_RED}✗${C_RESET} $1"
+}
+
+print_warning() {
+    echo -e "${C_YELLOW}⚠${C_RESET} $1"
+}
+
+print_info() {
+    echo -e "${C_BLUE}ℹ${C_RESET} $1"
+}
+
+prompt() {
+    local question="$1"
+    local default="$2"
+    local response
+    
+    if [[ "$default" == "y" ]]; then
+        echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} ${question} ${C_DIM}(Y/n)${C_RESET} "
+    else
+        echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} ${question} ${C_DIM}(y/N)${C_RESET} "
+    fi
+    
+    read -r response
+    
+    if [[ -z "$response" ]]; then
+        [[ "$default" == "y" ]] && return 0 || return 1
+    elif [[ "$response" =~ ^[Yy]$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# --- Banner ---
+echo ""
+echo -e "${C_BOLD}${C_MAGENTA}╔═════════════════════════╗${C_RESET}"
+echo -e "${C_BOLD}${C_MAGENTA}║   NixOS Update Script   ║${C_RESET}"
+echo -e "${C_BOLD}${C_MAGENTA}╚═════════════════════════╝${C_RESET}"
 
 # --- 1. Sudo Check ---
 if [[ "$EUID" -eq 0 ]]; then
-    echo -e "${C_YELLOW}⚠️  Warning: Running this script with sudo is not recommended.${C_RESET}"
-    echo "This can cause issues with Git authentication (SSH keys) and file permissions."
-    echo "The script will attempt to continue, but it may fail."
-    echo "--------------------------------------------------------"
+    echo ""
+    print_warning "Running this script with sudo is not recommended."
+    echo -e "  ${C_DIM}This can cause issues with Git authentication (SSH keys)${C_RESET}"
+    echo -e "  ${C_DIM}and file permissions. The script will continue, but may fail.${C_RESET}"
 fi
 
 # --- 2. Variable Defaults & Flag Parsing ---
@@ -47,31 +99,33 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *)
-            echo "Unknown option: $1"
+            print_error "Unknown option: $1"
             exit 1
             ;;
     esac
 done
 
 if [ "$AUTO_YES" = true ]; then
-    echo -e "${C_GREEN}✅ Running in non-interactive mode.${C_RESET}"
+    echo ""
+    print_info "Running in non-interactive mode"
     if [[ -z "$REBUILD_STRATEGY" ]]; then
         REBUILD_STRATEGY="boot"
     fi
-    echo "  - Rebuild strategy set to '${REBUILD_STRATEGY}'."
-    echo "  - Other prompts will be auto-accepted."
-    echo "--------------------------------------------------------"
+    echo -e "  ${C_DIM}→ Rebuild strategy: ${REBUILD_STRATEGY}${C_RESET}"
+    echo -e "  ${C_DIM}→ Prompts will be auto-accepted${C_RESET}"
 fi
 
-
 # --- 3. Pre-flight Check ---
+print_header "Checking repository status"
+
 if [[ -n $(git status --porcelain) ]]; then
-    echo -e "${C_YELLOW}⚠️  Warning: Uncommitted changes detected.${C_RESET}"
+    print_warning "Uncommitted changes detected"
     echo ""
     
     # Show changed files with line counts
-    echo -e "${C_BLUE}Changed files:${C_RESET}"
-    git diff --stat
+    echo -e "${C_DIM}┌─ Changed files:${C_RESET}"
+    git diff --stat | sed 's/^/│ /'
+    echo -e "${C_DIM}└─${C_RESET}"
     echo ""
     
     # Count total files and lines changed
@@ -79,76 +133,107 @@ if [[ -n $(git status --porcelain) ]]; then
     LINES_ADDED=$(git diff --numstat | awk '{sum+=$1} END {print sum+0}')
     LINES_REMOVED=$(git diff --numstat | awk '{sum+=$2} END {print sum+0}')
     
-    echo -e "${C_BLUE}Summary: ${FILES_CHANGED} file(s) changed, ${LINES_ADDED} insertion(s)(+), ${LINES_REMOVED} deletion(s)(-)${C_RESET}"
+    echo -e "  ${C_DIM}${FILES_CHANGED} file(s) • ${C_GREEN}+${LINES_ADDED}${C_RESET}${C_DIM} • ${C_RED}-${LINES_REMOVED}${C_RESET}"
     echo ""
     
     if [ "$AUTO_YES" = true ]; then
-        echo -e "${C_RED}❌ Error: Cannot proceed with uncommitted changes in non-interactive mode.${C_RESET}"
+        print_error "Cannot proceed with uncommitted changes in non-interactive mode"
         exit 1
     fi
     
-    read -p "Do you want to commit these changes? (y/N): " commit_choice
-    if [[ "$commit_choice" =~ ^[Yy]$ ]]; then
-        read -p "Enter commit message: " commit_msg
+    if prompt "Commit these changes now?" "n"; then
+        echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} Commit message: "
+        read -r commit_msg
         if [[ -z "$commit_msg" ]]; then
-            echo -e "${C_RED}❌ Error: Commit message cannot be empty.${C_RESET}"
+            print_error "Commit message cannot be empty"
             exit 1
         fi
         git add .
         git commit -m "$commit_msg"
-        echo -e "${C_GREEN}✅ Changes committed.${C_RESET}"
+        print_success "Changes committed"
     else
-        read -p "Continue anyway with uncommitted changes? (y/N): " continue_choice
-        if [[ ! "$continue_choice" =~ ^[Yy]$ ]]; then
-            echo -e "${C_RED}❌ Error: Uncommitted changes must be resolved before continuing.${C_RESET}"
-            exit 1
-        fi
-        echo -e "${C_YELLOW}⚠️  Continuing with uncommitted changes...${C_RESET}"
+        print_warning "Continuing with uncommitted changes"
+        echo -e "  ${C_DIM}→ Flake update will be skipped to avoid mixing changes${C_RESET}"
     fi
+else
+    print_success "Git working directory is clean"
 fi
-echo -e "${C_GREEN}✅ Git working directory is clean.${C_RESET}"
+
+# Track if we have uncommitted changes to skip flake update
+HAS_UNCOMMITTED=$(git status --porcelain)
 
 # --- 4. Remote Status Check ---
+print_header "Checking remote repository"
+
 if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     git remote update &>/dev/null
     if git status -uno | grep -q "Your branch is behind"; then
-        echo -e "${C_YELLOW}⚠️ Your local branch is behind the remote.${C_RESET}"
-        if [ "$AUTO_YES" = true ] || \
-           (read -p "Pull remote changes? (Y/n): " pull && [[ "$pull" =~ ^[Yy]?$ ]]); then
-            echo "Pulling changes..."
+        print_warning "Local branch is behind remote"
+        
+        if [ "$AUTO_YES" = true ] || prompt "Pull remote changes?" "n"; then
+            echo -e "  ${C_DIM}Pulling changes...${C_RESET}"
             git pull
+            print_success "Remote changes pulled"
+        else
+            print_info "Skipped pulling remote changes"
         fi
+    else
+        print_success "Local branch is up to date"
     fi
+else
+    print_info "No remote tracking branch configured"
 fi
 
 # --- 5. Optional: Update Flake Inputs ---
-if [ "$AUTO_YES" = true ] || \
-   (read -p "Do you want to SKIP the flake update? (Y/n): " skip && [[ "$skip" =~ ^[Yy]?$ ]]); then
-    echo "Skipping flake update as requested."
+print_header "Flake inputs update"
+
+FLAKE_WAS_UPDATED=false
+
+# Skip flake update if there are uncommitted changes
+if [[ -n "$HAS_UNCOMMITTED" ]]; then
+    print_info "Skipping flake update due to uncommitted changes"
 else
-    echo "Updating flake inputs..."
-    if ! sudo nix flake update; then
-        echo -e "${C_RED}❌ 'nix flake update' failed. Aborting.${C_RESET}"
-        exit 1
+    if [ "$AUTO_YES" = true ]; then
+        print_info "Skipping flake update (auto-yes mode defaults to safe option)"
+    else
+        if prompt "Update flake inputs?" "n"; then
+            echo -e "  ${C_DIM}Updating flake inputs...${C_RESET}"
+            if ! sudo nix flake update; then
+                print_error "'nix flake update' failed"
+                exit 1
+            fi
+            print_success "Flake inputs updated"
+            FLAKE_WAS_UPDATED=true
+        else
+            print_info "Skipped flake update"
+        fi
     fi
 fi
 
 # --- 6. Conditional Rebuild ---
-if [[ -z $(git status --porcelain) ]]; then
-    if [ "$AUTO_YES" = true ] || \
-       (read -p "No file changes to apply. Skip the system rebuild? (Y/n): " skip && [[ "$skip" =~ ^[Yy]?$ ]]); then
-        echo "Skipping rebuild as requested."
-        echo -e "${C_GREEN}🎉 NixOS update process complete.${C_RESET}"
+CURRENT_GIT_STATE=$(git status --porcelain)
+if [[ -z "$CURRENT_GIT_STATE" ]]; then
+    print_header "System rebuild"
+    
+    if [ "$AUTO_YES" = true ] || prompt "No file changes detected. Skip rebuild?" "y"; then
+        print_info "Skipped system rebuild"
+        echo ""
+        echo -e "${C_BOLD}${C_GREEN}✓ NixOS update process complete${C_RESET}"
         exit 0
     fi
 fi
 
 # --- 7. Choose Rebuild Strategy & Rebuild ---
+print_header "System rebuild"
+
 if [[ -z "$REBUILD_STRATEGY" ]]; then
-    echo -e "${C_BLUE}Please choose the activation strategy:${C_RESET}"
-    echo "  1) switch: Immediately activate the new configuration."
-    echo "  2) boot:   Activate on the next reboot. (Safer - Default)"
-    read -p "Enter choice [2]: " rebuild_choice
+    echo ""
+    echo -e "${C_BOLD}Select activation strategy:${C_RESET}"
+    echo -e "  ${C_DIM}1)${C_RESET} switch ${C_DIM}→ Activate immediately${C_RESET}"
+    echo -e "  ${C_DIM}2)${C_RESET} boot   ${C_DIM}→ Activate on next reboot (safer, default)${C_RESET}"
+    echo ""
+    echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} Enter choice ${C_DIM}[2]${C_RESET} "
+    read -r rebuild_choice
     if [[ "$rebuild_choice" == "1" ]]; then
         REBUILD_STRATEGY="switch"
     else
@@ -156,29 +241,48 @@ if [[ -z "$REBUILD_STRATEGY" ]]; then
     fi
 fi
 
-echo "Rebuilding the NixOS system with '$REBUILD_STRATEGY' strategy..."
+echo -e "  ${C_DIM}Building with strategy: ${REBUILD_STRATEGY}${C_RESET}"
 if ! sudo nixos-rebuild "$REBUILD_STRATEGY" --flake . --impure; then
-    echo -e "${C_RED}❌ System rebuild failed.${C_RESET}"
+    print_error "System rebuild failed"
     exit 1
 fi
-echo -e "${C_GREEN}✅ System rebuild successful.${C_RESET}"
+print_success "System rebuild successful"
 
-# --- 8. Commit and Push ---
-if [[ -n $(git status --porcelain) ]]; then
+# --- 8. Commit and Push Logic ---
+print_header "Finalizing changes"
+
+# Only auto-commit if flake was updated (which means git was clean before)
+if [ "$FLAKE_WAS_UPDATED" = true ] && [[ -n $(git status --porcelain) ]]; then
+    echo -e "  ${C_DIM}Committing flake input updates...${C_RESET}"
     git add .
-    git commit -m "update: automatic system update"
+    git commit -m "update: flake inputs updated"
+    print_success "Flake updates committed"
 
-    if [ "$AUTO_YES" = true ] || \
-       (read -p "Push update to remote? (Y/n): " push && [[ "$push" =~ ^[Yy]?$ ]]); then
-        echo "Pushing changes to remote..."
+    if [ "$AUTO_YES" = true ] || prompt "Push changes to remote?" "n"; then
+        echo -e "  ${C_DIM}Pushing to remote...${C_RESET}"
         git push
+        print_success "Changes pushed to remote"
+    else
+        print_info "Skipped pushing to remote"
     fi
+elif [[ -n $(git status --porcelain) ]]; then
+    echo ""
+    print_warning "You have uncommitted changes:"
+    echo ""
+    echo -e "${C_DIM}┌─ Status:${C_RESET}"
+    git status --short | sed 's/^/│ /'
+    echo -e "${C_DIM}└─${C_RESET}"
+    echo ""
 fi
 
 # --- 9. Final Message ---
-echo -e "${C_GREEN}🎉 NixOS update process complete.${C_RESET}"
+echo ""
+echo -e "${C_BOLD}${C_GREEN}✓ NixOS update process complete${C_RESET}"
+echo ""
+
 if [[ "$REBUILD_STRATEGY" == "switch" ]]; then
-    echo -e "${C_BLUE}💡 If you encounter issues, you can roll back with: sudo nixos-rebuild switch --rollback${C_RESET}"
+    echo -e "${C_DIM}💡 Rollback: ${C_RESET}sudo nixos-rebuild switch --rollback"
 elif [[ "$REBUILD_STRATEGY" == "boot" ]]; then
-    echo -e "${C_BLUE}💡 The new configuration will be active on your next reboot.${C_RESET}"
+    echo -e "${C_DIM}💡 New configuration will be active on next reboot${C_RESET}"
 fi
+echo ""
