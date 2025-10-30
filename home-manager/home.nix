@@ -61,6 +61,13 @@
     };
   };
 
+  programs.tmux = {
+    enable = true;
+    extraConfig = ''
+      set -g mouse on
+    '';
+  };
+
   home.sessionVariables = {
     TERMINAL = "warp-terminal";
     # NIXOS_OZONE_WL = "1";
