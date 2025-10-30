@@ -55,7 +55,7 @@
     initExtra = ''
       if [ "$TERM" = "foot" ]; then
         if [ -z "$TMUX" ]; then
-          exec tmux
+          exec tmux -u
         fi
       fi
     '';
