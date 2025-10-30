@@ -2,31 +2,48 @@
 
 SESSION="dev"
 
-# Create new detached session with default terminal size inheritance
-tmux new-session -d -s $SESSION -x- -y-
+if [ -n "$TMUX" ]; then
+  # Inside a tmux session: split current window
+  echo "Already inside tmux session."
 
-# Short delay to let tmux initialize
-sleep 0.1
+  CURRENT_SESSION=$(tmux display-message -p "#{session_name}")
+  CURRENT_WINDOW=$(tmux display-message -p "#{window_index}")
 
-# Get tmux session's window size (after session creation)
-cols=$(tmux display-message -p -t $SESSION:0 "#{window_width}")
-lines=$(tmux display-message -p -t $SESSION:0 "#{window_height}")
+  cols=$(tmux display-message -p -t "$CURRENT_SESSION:$CURRENT_WINDOW" "#{window_width}")
+  lines=$(tmux display-message -p -t "$CURRENT_SESSION:$CURRENT_WINDOW" "#{window_height}")
 
-# Calculate pane sizes for 70/30 vertical split and 50/50 horizontal split
-left_width=$(( (cols * 78) / 100 ))
-right_width=$(( cols - left_width ))
-half_height=$(( lines / 2 ))
+  left_width=$(( (cols * 7) / 10 ))
+  right_width=$(( cols - left_width ))
+  half_height=$(( lines / 2 ))
 
-# Perform the splits with tmux-reported sizes
-tmux split-window -h -l $right_width -t $SESSION:0
+  tmux split-window -h -l $right_width -t "$CURRENT_SESSION:$CURRENT_WINDOW"
+  tmux select-pane -t "$CURRENT_SESSION:$CURRENT_WINDOW.1"
+  tmux split-window -v -l $half_height -t "$CURRENT_SESSION:$CURRENT_WINDOW.1"
 
-tmux select-pane -t $SESSION:0.1
-tmux split-window -v -l $half_height -t $SESSION:0.1
+  tmux select-pane -t "$CURRENT_SESSION:$CURRENT_WINDOW.0"
+  tmux send-keys 'hx .' C-m
 
-# Send command to left pane
-tmux select-pane -t $SESSION:0.0
-tmux send-keys 'hx .' C-m
+else
+  # Outside tmux: create session if it doesn't exist, then attach
+  if ! tmux has-session -t $SESSION 2>/dev/null; then
+    tmux new-session -d -s $SESSION -x- -y-
+    sleep 0.1
 
-# Attach to session
-tmux attach-session -t $SESSION
+    cols=$(tmux display-message -p -t $SESSION:0 "#{window_width}")
+    lines=$(tmux display-message -p -t $SESSION:0 "#{window_height}")
+
+    left_width=$(( (cols * 7) / 10 ))
+    right_width=$(( cols - left_width ))
+    half_height=$(( lines / 2 ))
+
+    tmux split-window -h -l $right_width -t $SESSION:0
+    tmux select-pane -t $SESSION:0.1
+    tmux split-window -v -l $half_height -t $SESSION:0.1
+
+    tmux select-pane -t $SESSION:0.0
+    tmux send-keys 'hx .' C-m
+  fi
+
+  tmux attach-session -t $SESSION
+fi
 
