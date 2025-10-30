@@ -1,12 +1,14 @@
 {
   programs.git = {
     enable = true;
-    userName = "Necryl";
-    userEmail = "74096664+Necryl@users.noreply.github.com";
-    extraConfig = {
-      init.defaultBranch = "main";
-      pull.rebase = true;
+    setting = {
+      user = {
+        name = "Necryl";
+        email = "74096664+Necryl@users.noreply.github.com";
+      };
     };
+    init.defaultBranch = "main";
+    pull.rebase = true;
   };
   programs.ssh = {
     enable = true;
