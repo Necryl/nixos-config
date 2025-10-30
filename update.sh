@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 
 # This script automates the NixOS update process.
@@ -97,8 +98,12 @@ if [[ -n $(git status --porcelain) ]]; then
         git commit -m "$commit_msg"
         echo -e "${C_GREEN}✅ Changes committed.${C_RESET}"
     else
-        echo -e "${C_RED}❌ Error: Uncommitted changes must be resolved before continuing.${C_RESET}"
-        exit 1
+        read -p "Continue anyway with uncommitted changes? (y/N): " continue_choice
+        if [[ ! "$continue_choice" =~ ^[Yy]$ ]]; then
+            echo -e "${C_RED}❌ Error: Uncommitted changes must be resolved before continuing.${C_RESET}"
+            exit 1
+        fi
+        echo -e "${C_YELLOW}⚠️  Continuing with uncommitted changes...${C_RESET}"
     fi
 fi
 echo -e "${C_GREEN}✅ Git working directory is clean.${C_RESET}"

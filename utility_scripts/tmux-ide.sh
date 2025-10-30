@@ -26,7 +26,7 @@ if [ -n "$TMUX" ]; then
 else
   # Outside tmux: create session if it doesn't exist, then attach
   if ! tmux has-session -t $SESSION 2>/dev/null; then
-    tmux new-session -d -s $SESSION -x- -y-
+    tmux -u new-session -d -s $SESSION -x- -y-
     sleep 0.1
     cols=$(tmux display-message -p -t $SESSION:0 "#{window_width}")
     lines=$(tmux display-message -p -t $SESSION:0 "#{window_height}")
@@ -39,5 +39,5 @@ else
     tmux select-pane -t $SESSION:0.0
     tmux send-keys 'hx .' C-m
   fi
-  tmux attach-session -t $SESSION
+  tmux -u attach-session -t $SESSION
 fi
