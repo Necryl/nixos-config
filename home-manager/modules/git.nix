@@ -1,7 +1,7 @@
 {
   programs.git = {
     enable = true;
-    setting = {
+    settings = {
       user = {
         name = "Necryl";
         email = "74096664+Necryl@users.noreply.github.com";
