@@ -67,8 +67,6 @@
       set -g mouse on
       set -g default-terminal "xterm-256color"
       set -as terminal-overrides ",xterm-256color:Tc"
-      set-option -g utf8 on
-      set-window-option -g utf8 on
     '';
   };
 
