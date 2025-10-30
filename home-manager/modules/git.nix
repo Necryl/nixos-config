@@ -6,8 +6,6 @@
         name = "Necryl";
         email = "74096664+Necryl@users.noreply.github.com";
       };
-    };
-    config = {
       init.defaultBranch = "main";
       pull.rebase = true;
     };

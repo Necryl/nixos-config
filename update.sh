@@ -65,8 +65,41 @@ fi
 
 # --- 3. Pre-flight Check ---
 if [[ -n $(git status --porcelain) ]]; then
-    echo -e "${C_RED}❌ Error: Uncommitted changes detected.${C_RESET}"
-    exit 1
+    echo -e "${C_YELLOW}⚠️  Warning: Uncommitted changes detected.${C_RESET}"
+    echo ""
+    
+    # Show changed files with line counts
+    echo -e "${C_BLUE}Changed files:${C_RESET}"
+    git diff --stat
+    echo ""
+    
+    # Count total files and lines changed
+    FILES_CHANGED=$(git status --porcelain | wc -l)
+    LINES_ADDED=$(git diff --numstat | awk '{sum+=$1} END {print sum+0}')
+    LINES_REMOVED=$(git diff --numstat | awk '{sum+=$2} END {print sum+0}')
+    
+    echo -e "${C_BLUE}Summary: ${FILES_CHANGED} file(s) changed, ${LINES_ADDED} insertion(s)(+), ${LINES_REMOVED} deletion(s)(-)${C_RESET}"
+    echo ""
+    
+    if [ "$AUTO_YES" = true ]; then
+        echo -e "${C_RED}❌ Error: Cannot proceed with uncommitted changes in non-interactive mode.${C_RESET}"
+        exit 1
+    fi
+    
+    read -p "Do you want to commit these changes? (y/N): " commit_choice
+    if [[ "$commit_choice" =~ ^[Yy]$ ]]; then
+        read -p "Enter commit message: " commit_msg
+        if [[ -z "$commit_msg" ]]; then
+            echo -e "${C_RED}❌ Error: Commit message cannot be empty.${C_RESET}"
+            exit 1
+        fi
+        git add .
+        git commit -m "$commit_msg"
+        echo -e "${C_GREEN}✅ Changes committed.${C_RESET}"
+    else
+        echo -e "${C_RED}❌ Error: Uncommitted changes must be resolved before continuing.${C_RESET}"
+        exit 1
+    fi
 fi
 echo -e "${C_GREEN}✅ Git working directory is clean.${C_RESET}"
 
