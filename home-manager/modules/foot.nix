@@ -14,10 +14,6 @@
       main = {
         font = "Fira Code:size=11";
         pad = "10x10";
-        shellProgram = [
-          "tmux"
-          "-u"
-        ];
       };
       colors = {
         alpha = 0.8;

@@ -52,6 +52,13 @@
     shellAliases = {
       new = "touch";
     };
+    initExtra = ''
+      if [ "$TERM" = "foot" ]; then
+        if [ -z "$TMUX" ]; then
+          exec tmux
+        fi
+      fi
+    '';
   };
 
   programs.ssh = {
