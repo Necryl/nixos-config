@@ -197,6 +197,7 @@ in
       "wheel"
       "video"
     ];
+    initialPassword = "changeme";
     packages = with pkgs; [
       #  thunderbird
     ];
@@ -210,6 +211,7 @@ in
       "wheel"
       "video"
     ];
+    initialPassword = "changeme";
   };
 
   environment.variables = {
