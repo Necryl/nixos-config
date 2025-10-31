@@ -17,8 +17,6 @@
     ./modules/xdg.nix
     ./modules/foot.nix
   ];
-  home.username = "necryl"; # Replace with your username
-  home.homeDirectory = "/home/necryl";
   home.stateVersion = "24.11"; # Adjust based on your NixOS version (e.g., "24.05" if newer)
 
   # Example: Install some packages

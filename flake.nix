@@ -73,9 +73,18 @@
             home-manager.users.necryl = {
               imports = [
                 ./home-manager/home.nix
+                ./home-manager/users/necryl.nix
                 cosmic-manager.homeManagerModules.cosmic-manager
               ];
             };
+            home-manager.users.work = {
+              imports = [
+                ./home-manager/home.nix
+                ./home-manager/users/work.nix
+                cosmic-manager.homeManagerModules.cosmic-manager
+              ];
+            };
+
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {
               inherit

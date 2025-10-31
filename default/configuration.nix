@@ -202,6 +202,16 @@ in
     ];
   };
 
+  users.users.work = {
+    isNormalUser = true;
+    description = "Work";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+    ];
+  };
+
   environment.variables = {
     EDITOR = "hx";
   };
