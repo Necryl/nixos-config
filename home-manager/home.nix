@@ -63,7 +63,6 @@
       set -g default-terminal "xterm-256color"
       set -as terminal-overrides ",xterm-256color:Tc"
       set -g default-command ${pkgs.fish}/bin/fish
-      set -g remain-on-exit on
     '';
   };
 
