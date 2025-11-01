@@ -191,10 +191,10 @@ FLAKE_WAS_UPDATED=false
 
 # Skip flake update if there are uncommitted changes
 if [[ -n "$HAS_UNCOMMITTED" ]]; then
-    print_info "Skipping flake update due to uncommitted changes"
+    print_info "Flake update skipped (uncommitted changes present)"
 else
     if [ "$AUTO_YES" = true ]; then
-        print_info "Skipping flake update (auto-yes mode defaults to safe option)"
+        print_info "Flake update skipped (auto-yes mode defaults to safe option)"
     else
         if prompt "Update flake inputs?" "n"; then
             echo -e "  ${C_DIM}Updating flake inputs...${C_RESET}"
@@ -202,31 +202,38 @@ else
                 print_error "'nix flake update' failed"
                 exit 1
             fi
-            print_success "Flake inputs updated"
             
-            # Commit flake.lock immediately after update
-            if [[ -n $(git status --porcelain) ]]; then
+            # Check if flake.lock actually changed
+            if [[ -n $(git status --porcelain flake.lock) ]]; then
+                print_success "Flake inputs updated"
+                
+                # Commit flake.lock immediately after update
                 echo -e "  ${C_DIM}Committing flake.lock...${C_RESET}"
                 git add flake.lock
                 git commit -m "update: flake inputs updated"
                 print_success "Flake changes committed"
                 FLAKE_WAS_UPDATED=true
+            else
+                print_success "Flake inputs already up to date"
             fi
         else
-            print_info "Skipped flake update"
+            print_info "Flake update skipped by user"
         fi
     fi
 fi
 
 # --- 6. Conditional Rebuild ---
 CURRENT_GIT_STATE=$(git status --porcelain)
-if [[ -z "$CURRENT_GIT_STATE" ]]; then
+SYSTEM_WAS_REBUILT=false
+
+if [[ -z "$CURRENT_GIT_STATE" ]] && [ "$FLAKE_WAS_UPDATED" = false ]; then
     print_header "System rebuild"
     
-    if [ "$AUTO_YES" = true ] || prompt "No file changes detected. Skip rebuild?" "y"; then
-        print_info "Skipped system rebuild"
+    if [ "$AUTO_YES" = true ] || prompt "No changes detected. Skip rebuild?" "y"; then
+        print_info "System rebuild skipped (no changes)"
         echo ""
-        echo -e "${C_BOLD}${C_GREEN}✓ NixOS update process complete${C_RESET}"
+        echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No changes found. System not rebuilt.${C_RESET}"
+        echo ""
         exit 0
     fi
 fi
@@ -255,6 +262,7 @@ if ! sudo nixos-rebuild "$REBUILD_STRATEGY" --flake . --impure; then
     exit 1
 fi
 print_success "System rebuild successful"
+SYSTEM_WAS_REBUILT=true
 
 # --- 8. Commit and Push Logic ---
 print_header "Finalizing changes"
@@ -280,12 +288,16 @@ fi
 
 # --- 9. Final Message ---
 echo ""
-echo -e "${C_BOLD}${C_GREEN}✓ NixOS update process complete${C_RESET}"
-echo ""
-
-if [[ "$REBUILD_STRATEGY" == "switch" ]]; then
-    echo -e "${C_DIM}💡 Rollback: ${C_RESET}sudo nixos-rebuild switch --rollback"
-elif [[ "$REBUILD_STRATEGY" == "boot" ]]; then
-    echo -e "${C_DIM}💡 New configuration will be active on next reboot${C_RESET}"
+if [ "$SYSTEM_WAS_REBUILT" = true ]; then
+    echo -e "${C_BOLD}${C_GREEN}✓ NixOS update process complete${C_RESET}"
+    echo ""
+    
+    if [[ "$REBUILD_STRATEGY" == "switch" ]]; then
+        echo -e "${C_DIM}💡 Rollback: ${C_RESET}sudo nixos-rebuild switch --rollback"
+    elif [[ "$REBUILD_STRATEGY" == "boot" ]]; then
+        echo -e "${C_DIM}💡 New configuration will be active on next reboot${C_RESET}"
+    fi
+else
+    echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No changes made. System not rebuilt.${C_RESET}"
 fi
 echo ""
