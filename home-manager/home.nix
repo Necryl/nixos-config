@@ -47,13 +47,6 @@
     shellAliases = {
       new = "touch";
     };
-    # initExtra = ''
-    #   if [ "$TERM" = "foot" ]; then
-    #     if [ -z "$TMUX" ]; then
-    #       exec tmux -u
-    #     fi
-    #   fi
-    # '';
   };
 
   programs.ssh = {
@@ -70,10 +63,16 @@
       set -g default-terminal "xterm-256color"
       set -as terminal-overrides ",xterm-256color:Tc"
       set -g default-command ${pkgs.fish}/bin/fish
+      set -g remain-on-exit on
     '';
   };
 
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      new = "touch";
+    };
+  };
 
   home.sessionVariables = {
     TERMINAL = "foot";

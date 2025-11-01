@@ -196,6 +196,7 @@ in
       "networkmanager"
       "wheel"
       "video"
+      "nixconfig"
     ];
     initialPassword = "changeme";
     packages = with pkgs; [
@@ -210,6 +211,7 @@ in
       "networkmanager"
       "wheel"
       "video"
+      "nixconfig"
     ];
     initialPassword = "changeme";
   };
