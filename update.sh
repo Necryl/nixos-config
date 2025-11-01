@@ -229,10 +229,10 @@ SYSTEM_WAS_REBUILT=false
 if [[ -z "$CURRENT_GIT_STATE" ]] && [ "$FLAKE_WAS_UPDATED" = false ]; then
     print_header "System rebuild"
     
-    if [ "$AUTO_YES" = true ] || prompt "No changes detected. Skip rebuild?" "y"; then
-        print_info "System rebuild skipped (no changes)"
+    if [ "$AUTO_YES" = true ] || prompt "No updates found. Skip rebuild?" "y"; then
+        print_info "System rebuild skipped (no updates)"
         echo ""
-        echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No changes found. System not rebuilt.${C_RESET}"
+        echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No updates found. System not rebuilt.${C_RESET}"
         echo ""
         exit 0
     fi
@@ -298,6 +298,6 @@ if [ "$SYSTEM_WAS_REBUILT" = true ]; then
         echo -e "${C_DIM}💡 New configuration will be active on next reboot${C_RESET}"
     fi
 else
-    echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No changes made. System not rebuilt.${C_RESET}"
+    echo -e "${C_BOLD}${C_BLUE}ℹ${C_RESET} No updates made. System not rebuilt.${C_RESET}"
 fi
 echo ""
