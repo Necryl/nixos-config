@@ -1,27 +1,29 @@
 #!/bin/bash
 SESSION="dev"
 if [ -n "$TMUX" ]; then
-  # Inside a tmux session: split current pane only
-  echo "Already inside tmux session."
-  CURRENT_PANE=$(tmux display-message -p "#{pane_id}")
+  # Inside a tmux session: create a new window with the layout
+  echo "Creating new dev window..."
   
-  # Get dimensions of the current pane (not window)
-  cols=$(tmux display-message -p "#{pane_width}")
-  lines=$(tmux display-message -p "#{pane_height}")
+  # Create a new window with a descriptive name
+  tmux new-window -n "dev"
+  
+  # Get dimensions of the new window
+  cols=$(tmux display-message -p "#{window_width}")
+  lines=$(tmux display-message -p "#{window_height}")
   
   left_width=$(( (cols * 7) / 10 ))
   right_width=$(( cols - left_width ))
   half_height=$(( lines / 2 ))
   
-  # Split the current pane horizontally
+  # Split the window horizontally
   tmux split-window -h -l $right_width
   RIGHT_PANE=$(tmux display-message -p "#{pane_id}")
   
   # Split the right pane vertically
   tmux split-window -v -l $half_height -t "$RIGHT_PANE"
   
-  # Return to the original left pane
-  tmux select-pane -t "$CURRENT_PANE"
+  # Return to the left pane and start helix
+  tmux select-pane -t 0
   tmux send-keys 'hx .' C-m
 else
   # Outside tmux: create session if it doesn't exist, then attach
