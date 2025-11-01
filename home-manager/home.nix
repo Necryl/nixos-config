@@ -27,9 +27,6 @@
     obsidian
     ueberzugpp # image rednering support for yazi
     nodejs
-    nodePackages.svelte-language-server # Svelte LSP
-    nodePackages.typescript-language-server # JS and TS LSP
-    nodePackages.vscode-langservers-extracted # JSON LSP
     emmet-language-server
     nodePackages.pnpm
     nodePackages.prettier

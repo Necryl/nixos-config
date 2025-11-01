@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   programs.helix = {
     enable = true;
     package = pkgs.helix; # Use the Helix from nixpkgs
@@ -122,7 +123,7 @@
         {
           name = "svelte";
           auto-format = true;
-          language-servers = ["svelteserver"];
+          language-servers = [ "svelteserver" ];
         }
         {
           name = "javascript";
@@ -134,7 +135,7 @@
             ];
             command = lib.getExe pkgs.nodePackages.prettier;
           };
-          language-servers = ["typescript-language-server"];
+          language-servers = [ "typescript-language-server" ];
         }
         {
           name = "typescript";
@@ -146,12 +147,12 @@
             ];
             command = lib.getExe pkgs.nodePackages.prettier;
           };
-          language-servers = ["typescript-language-server"];
+          language-servers = [ "typescript-language-server" ];
         }
         {
           name = "json";
           auto-format = true;
-          language-servers = ["vscode-json-language-server"];
+          language-servers = [ "vscode-json-language-server" ];
         }
         {
           name = "html";
@@ -168,31 +169,49 @@
             "emmet-lsp"
           ]; # Use both for maximum coverage
         }
+        {
+          name = "astro";
+          auto-format = true;
+          formatter = {
+            command = lib.getExe pkgs.nodePackages.prettier;
+            args = [
+              "--plugin=prettier-plugin-astro"
+              "--parser=astro"
+            ];
+          };
+          language-servers = [ "astro-ls" ];
+        }
       ];
       language-server = {
         svelteserver = {
           command = lib.getExe pkgs.nodePackages.svelte-language-server;
-          args = ["--stdio"];
+          args = [ "--stdio" ];
         };
         typescript-language-server = {
           command = lib.getExe pkgs.nodePackages.typescript-language-server;
-          args = ["--stdio"];
+          args = [ "--stdio" ];
         };
         vscode-json-language-server = {
           command = "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-json-language-server";
-          args = ["--stdio"];
+          args = [ "--stdio" ];
         };
         emmet-lsp = {
           command = lib.getExe pkgs.emmet-language-server;
-          args = ["--stdio"];
+          args = [ "--stdio" ];
         };
+        astro-ls = {
+          command = lib.getExe pkgs.astro-language-server;
+          args = [ "--stdio" ];
+        };
+
       };
     };
   };
 
-  
   # Helix dependencies (e.g., LSPs if needed)
   home.packages = with pkgs; [
-    # Add more tools here (e.g., rust-analyzer)
+    nodePackages.svelte-language-server # Svelte LSP
+    nodePackages.typescript-language-server # JS and TS LSP
+    nodePackages.vscode-langservers-extracted # JSON LSP
   ];
 }

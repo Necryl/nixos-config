@@ -12,7 +12,6 @@
     steam-run
     gh
     git
-    # gnumeric
     rclone
     tree
     libnotify

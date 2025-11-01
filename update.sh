@@ -55,7 +55,7 @@ prompt() {
         echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} ${question} ${C_DIM}(y/N)${C_RESET} "
     fi
     
-    read -r response
+    read -r -e response
     
     if [[ -z "$response" ]]; then
         [[ "$default" == "y" ]] && return 0 || return 1
@@ -143,7 +143,7 @@ if [[ -n $(git status --porcelain) ]]; then
     
     if prompt "Commit these changes now?" "n"; then
         echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} Commit message: "
-        read -r commit_msg
+        read -e -r commit_msg
         if [[ -z "$commit_msg" ]]; then
             print_error "Commit message cannot be empty"
             exit 1
@@ -248,7 +248,7 @@ if [[ -z "$REBUILD_STRATEGY" ]]; then
     echo -e "  ${C_DIM}2)${C_RESET} boot   ${C_DIM}→ Activate on next reboot (safer, default)${C_RESET}"
     echo ""
     echo -ne "${C_BOLD}${C_BLUE}?${C_RESET} Enter choice ${C_DIM}[2]${C_RESET} "
-    read -r rebuild_choice
+    read -e -r rebuild_choice
     if [[ "$rebuild_choice" == "1" ]]; then
         REBUILD_STRATEGY="switch"
     else
