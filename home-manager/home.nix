@@ -16,6 +16,7 @@
     ./modules/yazi.nix
     ./modules/xdg.nix
     ./modules/foot.nix
+    ./modules/rust.nix
   ];
   home.stateVersion = "24.11"; # Adjust based on your NixOS version (e.g., "24.05" if newer)
 
