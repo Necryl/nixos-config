@@ -5,7 +5,7 @@
 {
   home.packages = with pkgs; [
     rustup
-    # rust-analyzer rustup was already providing this, so commented it out to fix the conflicting paths issue
+    rust-analyzer
     wasm-pack
     wasm-bindgen-cli
   ];
