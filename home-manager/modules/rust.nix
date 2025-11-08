@@ -5,7 +5,7 @@
 {
   home.packages = with pkgs; [
     rustup
-    rust-analyzer
+    # rust-analyzer
     wasm-pack
     wasm-bindgen-cli
   ];
