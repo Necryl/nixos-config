@@ -36,8 +36,8 @@
     krita
     vscode
     gimp3-with-plugins
-    code-cursor
     tmux
+    gemini-cli
 
     gcc
   ];
