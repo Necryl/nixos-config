@@ -197,6 +197,7 @@ in
       "wheel"
       "video"
       "nixconfig"
+      "nixos-admins"
     ];
     initialPassword = "changeme";
     packages = with pkgs; [
@@ -212,6 +213,7 @@ in
       "wheel"
       "video"
       "nixconfig"
+      "nixos-admins"
     ];
     initialPassword = "changeme";
   };
