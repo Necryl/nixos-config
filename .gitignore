@@ -1,1 +1,4 @@
 local/local-hardware.nix
+
+# NixOS rebuild state tracking
+.nixos-rebuild-state
