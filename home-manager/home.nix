@@ -44,6 +44,7 @@
     google-chrome
     ungoogled-chromium
     anydesk
+    antigravity
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
