@@ -1,16 +1,47 @@
-# My nixos setup
+# My NixOS Setup
 
-It is a simple  setup with Cosmic DE, Helix as the code editor, Warp as the terminal. And a bunch of other random softwares I needed. I will try to build the system up to be as polished as it can be. The packages in the home.nix is more just personal softwares, not really necessary for the system. Although some of the customising of some softwares like helix and yazi is done through home-manager.
+This repository contains my personal NixOS configuration. It's a highly customized setup with a focus on a cyberpunk aesthetic and a terminal-centric workflow.
 
-I aim for a cyberpunk aesthetic as that's what I love. It is not completely there yet, but we will see.
-There is a cosmic theme file in the main directory, that has to be imported in Cosmic Appearance settings to get the color scheme.
+## Key Features
 
-> ## Managing `local/local-hardware.nix` in Nix Flakes
+*   **Desktop Environment:** [COSMIC DE](https://github.com/pop-os/cosmic-epoch)
+*   **Terminal:** [foot](https://codeberg.org/dnkl/foot) (primary), with [Warp](https://www.warp.dev/) as a fallback.
+*   **Editor:** [Helix](https://helix-editor.com/), with extensive language server configuration for web development.
+*   **Theme:** A custom cyberpunk theme, including a GRUB theme, a Cosmic DE theme, and a terminal color scheme.
+*   **Workflow:** A terminal-centric workflow with `tmux` and a variety of command-line tools.
+*   **Compatibility:** A wide range of compatibility tools, including `wine`, `distrobox`, `nix-alien`, `steam-run`, and `appimage-run`.
 
- The local-hardware.nix will be unique for each machine. So do not push that file to the repo.
+## Workflow
 
-For now I will use an absolute path to it and use the `--impure` flag to build the system. But if you wanna use a relative path be sure not to commit it or push it to the repo.
- However if you don't add it to git, then flakes won't be able to see it. So currently the best worst solution I have is to remove it from `.gitignore` just before rebuilding, add it to git, rebuild the system and then add it to `.gitignore` again, remove the file from git cache and continue. Basically just ensure the file is not added to any commit or pushed to the repo.
-I wish there was a better solution.
+The system is managed using a custom `update.sh` script, which automates the process of updating the system, including pulling from a Git remote, updating flake inputs, and rebuilding the system.
 
-If you decide to go with the absolute path (which is what I have), make sure you edit the absolute path to match your location of the files.
+To update the system, run:
+
+```bash
+./update.sh
+```
+
+## Machine-specific Configuration
+
+This configuration uses a file named `local/local-hardware.nix` for machine-specific hardware configuration. This file is not tracked by Git.
+
+To use this configuration on your own machine, you will need to:
+
+1.  **Create your own `local-hardware.nix` file.** You can use the `local/local-hardware-template.nix.sample` as a starting point.
+2.  **Configure it for your hardware.** You can use the `nixos-generate-config` command to generate a hardware configuration for your system.
+3.  **Edit the path in `flake.nix`** to point to the location of your `local/local-hardware.nix` file.
+
+Look for this line in `flake.nix`:
+
+```nix
+/home/necryl/nixos-config/local/local-hardware.nix
+```
+
+And change it to the correct path for your system.
+
+This setup requires the use of the `--impure` flag when running `nixos-rebuild`.
+
+## Themes
+
+*   **Cosmic DE Theme:** The theme for Cosmic DE is defined in `CosmicCyberpunkDarkTheme.ron`. This theme needs to be manually imported in the Cosmic DE settings.
+*   **Cursor Theme:** The `WinSur-white-cursors` directory contains a cursor theme. This theme is not yet implemented in the configuration.
