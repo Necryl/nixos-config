@@ -24,6 +24,10 @@
       flake = false;
     };
     nix-alien.url = "github:thiagokokada/nix-alien";
+    antigravity = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -36,6 +40,7 @@
       cosmic-manager,
       cybergrub-theme,
       nix-alien,
+      antigravity,
       ...
     }@inputs:
     let
@@ -66,6 +71,9 @@
           ./modules.nix
           ./cache.nix
           /home/necryl/nixos-config/local/local-hardware.nix
+          {
+            nixpkgs.overlays = [ inputs.antigravity.overlays.default ];
+          }
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -91,6 +99,7 @@
                 inputs
                 warp-terminal-theme
                 self
+                antigravity
                 ;
             };
           }

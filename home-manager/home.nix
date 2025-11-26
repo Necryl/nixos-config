@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   warp-terminal-theme,
+  antigravity,
   ...
 }:
 {
