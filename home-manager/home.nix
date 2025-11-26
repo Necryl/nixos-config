@@ -40,6 +40,9 @@
     gemini-cli
 
     gcc
+    google-chrome
+    ungoogled-chromium
+    anydesk
   ];
 
   # programs.kitty.enable = true; # required for the default Hyprland config
