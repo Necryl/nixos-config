@@ -198,7 +198,9 @@ update_state_file() {
     # Write to the actual state file, ensuring permissions are correct
     $ROOT_CMD cp "$temp_state_file" "$STATE_FILE"
     if [[ -n "${SUDO_USER-}" ]]; then
-        $ROOT_CMD chown "$SUDO_USER":"$SUDO_USER" "$STATE_FILE"
+        local user_group
+        user_group=$(id -gn "$SUDO_USER")
+        $ROOT_CMD chown "$SUDO_USER":"$user_group" "$STATE_FILE"
     fi
 
     rm -f "$temp_state_file"
