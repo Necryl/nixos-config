@@ -57,14 +57,31 @@ C_DIM='\033[2m'
 display_help() {
     echo "Usage: bash update.sh [FLAGS]"
     echo ""
+    echo "This script automates the process of checking for, committing, and applying NixOS configuration updates."
+    echo ""
     echo "Flags:"
     echo "  -h, --help         Show this help message and exit."
-    echo "  -y, --yes          Run in non-interactive mode."
-    echo "  -v, --verbose      Show detailed state snapshot information."
-    echo "  --switch           Use the 'switch' rebuild strategy."
-    echo "  --boot             Use the 'boot' rebuild strategy."
-    echo "  --update-flake     Update flake inputs (works with --yes)."
-    echo "  --force-rebuild    Force rebuild even if no changes detected."
+    echo ""
+    echo "  -y, --yes          Enable non-interactive mode. This will:"
+    echo "                     - Automatically accept all prompts (e.g., pulling remote changes)."
+    echo "                     - Default to the 'boot' rebuild strategy if not specified."
+    echo "                     - Abort if uncommitted changes are detected."
+    echo "                     - Require '--update-flake' to be set explicitly to update flakes."
+    echo ""
+    echo "  -v, --verbose      Show a detailed diff of configuration file changes when a change is detected."
+    echo "                     This compares the current file states against the snapshot from the last successful build."
+    echo ""
+    echo "  --switch           Set the rebuild strategy to 'switch'. The new configuration is activated immediately."
+    echo "                     This is equivalent to running 'nixos-rebuild switch'."
+    echo ""
+    echo "  --boot             Set the rebuild strategy to 'boot'. The new configuration is activated on the next reboot."
+    echo "                     This is the safer default and is used automatically in non-interactive mode."
+    echo ""
+    echo "  --update-flake     Force an update of all flake inputs by running 'nix flake update'."
+    echo "                     If the flake.lock file changes, it will be automatically committed."
+    echo ""
+    echo "  --force-rebuild    Force the script to perform a system rebuild even if no configuration changes are detected."
+    echo "                     This bypasses the state snapshot check."
 }
 
 print_header() {
@@ -179,14 +196,9 @@ update_state_file() {
     fi
 
     # Write to the actual state file, ensuring permissions are correct
-    if [[ "$EUID" -eq 0 ]]; then
-        # If script is run as root, use tee to write as root and then chown
-        cat "$temp_state_file" | sudo tee "$STATE_FILE" > /dev/null
-        local original_user=${SUDO_USER:-$(logname)}
-        sudo chown "$original_user":"$original_user" "$STATE_FILE"
-    else
-        # If script is run as normal user, write directly
-        cat "$temp_state_file" > "$STATE_FILE"
+    $ROOT_CMD cp "$temp_state_file" "$STATE_FILE"
+    if [[ -n "${SUDO_USER-}" ]]; then
+        $ROOT_CMD chown "$SUDO_USER":"$SUDO_USER" "$STATE_FILE"
     fi
 
     rm -f "$temp_state_file"
@@ -203,12 +215,32 @@ echo -e "${C_BOLD}${C_MAGENTA}╔═══════════════�
 echo -e "${C_BOLD}${C_MAGENTA}║   NixOS Update Script   ║${C_RESET}"
 echo -e "${C_BOLD}${C_MAGENTA}╚═════════════════════════╝${C_RESET}"
 
-# --- 1. Sudo Check ---
-if [[ "$EUID" -eq 0 ]]; then
-    echo ""
-    print_warning "Running this script with sudo is not recommended."
-    echo -e "  ${C_DIM}This can cause issues with Git authentication (SSH keys)${C_RESET}"
-    echo -e "  ${C_DIM}and file permissions. The script will continue, but may fail.${C_RESET}"
+# --- 1. Privilege Management ---
+SUDO_DETECTED=false
+if [[ ${EUID} -eq 0 ]]; then
+    if [[ -n "${SUDO_USER-}" ]]; then
+        SUDO_DETECTED=true
+        print_info "Running with sudo. Git commands will run as '$SUDO_USER'."
+    else
+        print_warning "Running as root without sudo. Git operations might fail if not configured for root."
+    fi
+fi
+
+# Define GIT_CMD based on whether sudo was used.
+# This ensures git commands run as the intended user and use their HOME directory for config.
+if [ "$SUDO_DETECTED" = true ]; then
+    # When running with sudo, explicitly set HOME to the original user's home
+    # and execute git as that user.
+    GIT_CMD="sudo -E -u $SUDO_USER HOME=/home/$SUDO_USER git"
+else
+    # Otherwise, run git directly.
+    GIT_CMD="git"
+fi
+
+# ROOT_CMD is used for operations that require actual root privileges (like nixos-rebuild)
+ROOT_CMD="sudo" # Assume we need sudo, unless we're already root
+if [[ ${EUID} -eq 0 ]]; then
+    ROOT_CMD="" # We are root, no need to prefix root commands with sudo
 fi
 
 # --- 2. Variable Defaults & Flag Parsing ---
@@ -296,21 +328,21 @@ fi
 print_header "Checking repository status"
 
 HAS_UNCOMMITTED=false
-if [[ -n $(git status --porcelain) ]]; then
+if [[ -n $($GIT_CMD status --porcelain) ]]; then
     HAS_UNCOMMITTED=true
     print_warning "Uncommitted changes detected"
     echo ""
     
     # Show changed files with line counts
     echo -e "${C_DIM}┌─ Changed files:${C_RESET}"
-    git diff --stat | sed 's/^/│ /'
+    $GIT_CMD diff --stat | sed 's/^/│ /'
     echo -e "${C_DIM}└─${C_RESET}"
     echo ""
     
     # Count total files and lines changed
-    FILES_CHANGED=$(git status --porcelain | wc -l)
-    LINES_ADDED=$(git diff --numstat | awk '{sum+=$1} END {print sum+0}')
-    LINES_REMOVED=$(git diff --numstat | awk '{sum+=$2} END {print sum+0}')
+    FILES_CHANGED=$($GIT_CMD status --porcelain | wc -l)
+    LINES_ADDED=$($GIT_CMD diff --numstat | awk '{sum+=$1} END {print sum+0}')
+    LINES_REMOVED=$($GIT_CMD diff --numstat | awk '{sum+=$2} END {print sum+0}')
     
     echo -e "  ${C_DIM}${FILES_CHANGED} file(s) • ${C_GREEN}+${LINES_ADDED}${C_RESET}${C_DIM} • ${C_RED}-${LINES_REMOVED}${C_RESET}"
     echo ""
@@ -334,14 +366,14 @@ if [[ -n $(git status --porcelain) ]]; then
             print_error "Commit message cannot be empty"
             exit 1
         fi
-        git add .
-        git commit -m "$commit_msg"
+        $GIT_CMD add .
+        $GIT_CMD commit -m "$commit_msg"
         print_success "Changes committed"
         HAS_UNCOMMITTED=false
     else
         # User typed a commit message directly
-        git add .
-        git commit -m "$commit_response"
+        $GIT_CMD add .
+        $GIT_CMD commit -m "$commit_response"
         print_success "Changes committed"
         HAS_UNCOMMITTED=false
     fi
@@ -353,15 +385,15 @@ fi
 print_header "Checking remote repository"
 
 HAS_UPSTREAM=false
-if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+if $GIT_CMD rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
     HAS_UPSTREAM=true
-    git remote update &>/dev/null
-    if git status -uno | grep -q "Your branch is behind"; then
+    $GIT_CMD remote update &>/dev/null
+    if $GIT_CMD status -uno | grep -q "Your branch is behind"; then
         print_warning "Local branch is behind remote"
         
         if [ "$AUTO_YES" = true ] || prompt "Pull remote changes?" "n"; then
             echo -e "  ${C_DIM}Pulling changes...${C_RESET}"
-            git pull
+            $GIT_CMD pull
             print_success "Remote changes pulled"
             # Recheck configuration state after pull
             if [ "$FORCE_REBUILD" = false ] && check_config_changed; then
@@ -382,19 +414,19 @@ print_header "Flake inputs update"
 
 if [ "$UPDATE_FLAKE" = true ]; then
     echo -e "  ${C_DIM}Updating flake inputs...${C_RESET}"
-    if ! sudo nix flake update; then
+    if ! $ROOT_CMD nix flake update; then
         print_error "'nix flake update' failed"
         exit 1
     fi
     
     # Check if flake.lock actually changed
-    if [[ -n $(git status --porcelain flake.lock) ]]; then
+    if [[ -n $($GIT_CMD status --porcelain flake.lock) ]]; then
         print_success "Flake inputs updated"
         
         # Commit flake.lock immediately after update
         echo -e "  ${C_DIM}Committing flake.lock...${C_RESET}"
-        git add flake.lock
-        git commit -m "update: flake inputs updated"
+        $GIT_CMD add flake.lock
+        $GIT_CMD commit -m "update: flake inputs updated"
         print_success "Flake changes committed"
         HAS_UNCOMMITTED=false
         
@@ -410,20 +442,18 @@ elif [ "$AUTO_YES" = true ]; then
 else
     if prompt "Update flake inputs?" "n"; then
         echo -e "  ${C_DIM}Updating flake inputs...${C_RESET}"
-        if ! sudo nix flake update; then
+        if ! $ROOT_CMD nix flake update; then
             print_error "'nix flake update' failed"
             exit 1
         fi
         
-        # Check if flake.lock actually changed
-        if [[ -n $(git status --porcelain flake.lock) ]]; then
-            print_success "Flake inputs updated"
+            # Check if flake.lock actually changed
+            if [[ -n $($GIT_CMD status --porcelain flake.lock) ]]; then            print_success "Flake inputs updated"
             
             # Commit flake.lock immediately after update
-            echo -e "  ${C_DIM}Committing flake.lock...${C_RESET}"
-            git add flake.lock
-            git commit -m "update: flake inputs updated"
-            print_success "Flake changes committed"
+                    echo -e "  ${C_DIM}Committing flake.lock...${C_RESET}"
+                    $GIT_CMD add flake.lock
+                    $GIT_CMD commit -m "update: flake inputs updated"            print_success "Flake changes committed"
             HAS_UNCOMMITTED=false
             
             # Recheck configuration state after flake update
@@ -452,7 +482,7 @@ if [ "$CONFIG_CHANGED" = false ]; then
         fi
         
         if [ "$HAS_UPSTREAM" = true ]; then
-            if git log @{u}.. --oneline 2>/dev/null | grep -q .; then
+            if $GIT_CMD log @{u}.. --oneline 2>/dev/null | grep -q .; then
                 print_warning "You have unpushed commits"
             fi
         fi
@@ -487,7 +517,7 @@ echo -e "  ${C_DIM}Building with strategy: ${REBUILD_STRATEGY}${C_RESET}"
 # Mark that rebuild is starting
 REBUILD_IN_PROGRESS=true
 
-if ! sudo nixos-rebuild "$REBUILD_STRATEGY" --flake . --impure; then
+if ! $ROOT_CMD nixos-rebuild "$REBUILD_STRATEGY" --flake .#nixos --impure; then
     print_error "System rebuild failed"
     REBUILD_IN_PROGRESS=false
     exit 1
@@ -508,11 +538,11 @@ print_info "Configuration state snapshot updated"
 print_header "Finalizing changes"
 
 # Only check for unpushed commits if upstream exists
-if [ "$HAS_UPSTREAM" = true ]; then
-    if git log @{u}.. --oneline 2>/dev/null | grep -q .; then
-        if [ "$AUTO_YES" = true ] || prompt "Push changes to remote?" "n"; then
-            echo -e "  ${C_DIM}Pushing to remote...${C_RESET}"
-            git push
+        if [ "$HAS_UPSTREAM" = true ]; then
+            if $GIT_CMD log @{u}.. --oneline 2>/dev/null | grep -q .; then
+                if [ "$AUTO_YES" = true ] || prompt "Push changes to remote?" "n"; then
+                    echo -e "  ${C_DIM}Pushing to remote...${C_RESET}"
+                    $GIT_CMD push
             print_success "Changes pushed to remote"
         else
             print_info "Skipped pushing to remote"
@@ -526,7 +556,7 @@ if [ "$HAS_UNCOMMITTED" = true ]; then
     print_warning "You have uncommitted changes:"
     echo ""
     echo -e "${C_DIM}┌─ Status:${C_RESET}"
-    git status --short | sed 's/^/│ /'
+    $USER_CMD git status --short | sed 's/^/│ /'
     echo -e "${C_DIM}└─${C_RESET}"
     echo ""
 fi
