@@ -157,9 +157,31 @@ check_config_changed() {
 
 update_state_file() {
     # Update the state file with the current configuration snapshot
-    if ! get_config_state > "$STATE_FILE"; then
-        print_error "Failed to update state file"
+    # Ensure the state file is always owned by the user running the script
+    local temp_state_file
+    temp_state_file=$(mktemp)
+
+    if ! get_config_state > "$temp_state_file"; then
+        print_error "Failed to generate configuration state for update"
+        rm -f "$temp_state_file"
         return 1
+    fi
+
+    # Write to the actual state file, ensuring permissions are correct
+    if [[ "$EUID" -eq 0 ]]; then
+        # If script is run as root, use tee to write as root and then chown
+        cat "$temp_state_file" | sudo tee "$STATE_FILE" > /dev/null
+        local original_user=${SUDO_USER:-$(logname)}
+        sudo chown "$original_user":"$original_user" "$STATE_FILE"
+    else
+        # If script is run as normal user, write directly
+        cat "$temp_state_file" > "$STATE_FILE"
+    fi
+
+    rm -f "$temp_state_file"
+    if [[ $? -ne 0 ]]; then
+        print_error "Failed to update state file"
+        exit 1 # Exit immediately on failure to update state file
     fi
     return 0
 }
@@ -456,7 +478,10 @@ REBUILD_COMPLETED=true
 print_success "System rebuild successful"
 
 # Update state file after successful rebuild
-update_state_file
+if ! update_state_file; then
+    print_error "Failed to update configuration state snapshot."
+    exit 1
+fi
 print_info "Configuration state snapshot updated"
 
 # --- 9. Push Logic ---
