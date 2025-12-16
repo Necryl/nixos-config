@@ -54,6 +54,19 @@ C_BOLD='\033[1m'
 C_DIM='\033[2m'
 
 # --- Helper Functions ---
+display_help() {
+    echo "Usage: bash update.sh [FLAGS]"
+    echo ""
+    echo "Flags:"
+    echo "  -h, --help         Show this help message and exit."
+    echo "  -y, --yes          Run in non-interactive mode."
+    echo "  -v, --verbose      Show detailed state snapshot information."
+    echo "  --switch           Use the 'switch' rebuild strategy."
+    echo "  --boot             Use the 'boot' rebuild strategy."
+    echo "  --update-flake     Update flake inputs (works with --yes)."
+    echo "  --force-rebuild    Force rebuild even if no changes detected."
+}
+
 print_header() {
     echo ""
     echo -e "${C_BOLD}${C_MAGENTA}▸ $1${C_RESET}"
@@ -129,9 +142,7 @@ check_config_changed() {
     fi
     
     if [[ ! -f "$STATE_FILE" ]]; then
-        if [ "$VERBOSE" = true ]; then
-            print_info "No previous state file found - treating as changed"
-        fi
+        NO_STATE_FILE=true
         return 0
     fi
     
@@ -233,6 +244,10 @@ while [[ $# -gt 0 ]]; do
             FORCE_REBUILD=true
             shift
             ;;
+        -h|--help)
+            display_help
+            exit 0
+            ;;
         *)
             print_error "Unknown option: $1"
             exit 1
@@ -262,12 +277,17 @@ fi
 print_header "Checking configuration state"
 
 CONFIG_CHANGED=false
+NO_STATE_FILE=false
 if [ "$FORCE_REBUILD" = true ]; then
     CONFIG_CHANGED=true
     print_info "Force rebuild enabled - skipping change detection"
 elif check_config_changed; then
     CONFIG_CHANGED=true
-    print_info "Configuration changes detected"
+    if [ "$NO_STATE_FILE" = true ]; then
+        print_info "No .nixos-rebuild-state file found. Assuming changes."
+    else
+        print_info "Configuration changes detected"
+    fi
 else
     print_success "Configuration unchanged since last build"
 fi
