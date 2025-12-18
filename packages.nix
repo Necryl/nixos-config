@@ -16,7 +16,7 @@
     tree
     libnotify
     vlc
-    inputs.zen-browser.packages."${system}".default
+    inputs.zen-browser.packages."${stdenv.hostPlatform.system}".default
     fd
     fzf
     mission-center
@@ -28,6 +28,7 @@
     pciutils
     usbutils
     wineWowPackages.waylandFull
+    xclip
     nomacs
     libreoffice
     foot
@@ -36,7 +37,7 @@
     distrobox
     p7zip-rar
     efibootmgr
-    inputs.nix-alien.packages.${pkgs.system}.default
+    inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.default
     cliphist
     wofi
 

@@ -54,7 +54,7 @@
     {
 
       # Define packages as a single attribute set
-      packages.${system} = {
+      packages.${pkgs.stdenv.hostPlatform.system} = {
         hello = pkgs.hello;
         default = pkgs.hello;
 

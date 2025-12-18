@@ -40,6 +40,8 @@
   environment.sessionVariables = {
     COSMIC_DATA_CONTROL_ENABLED = 1;
     COSMIC_DISABLE_DIRECT_SCANOUT = "true";
+
+    WINE_VK_USE_FSR = "1";
   };
 
 }

@@ -244,6 +244,15 @@ in
     dockerCompat = true;
   };
 
+  systemd.user.services.clipboard-sync = {
+    description = "Clipboard sync between X11 and Wayland";
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.xclip}/bin/xclip -selection clipboard'";
+      Restart = "always";
+    };
+  };
+
   nix.settings.download-buffer-size = 524288000;
 
   # List packages installed in system profile. To search, run:
